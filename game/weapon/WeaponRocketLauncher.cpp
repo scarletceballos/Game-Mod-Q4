@@ -100,11 +100,11 @@ void rvWeaponRocketLauncher::Spawn ( void ) {
 
 	spawnArgs.GetFloat ( "lockSlowdown", ".25", f );
 	attackDict.GetFloat ( "speed", "0", guideSpeedFast );
-	guideSpeedSlow = guideSpeedFast * f;
+	guideSpeedSlow = guideSpeedFast * f / .12;
 	
-	reloadRate = SEC2MS ( spawnArgs.GetFloat ( "reloadRate", ".8" ) );
+	reloadRate = SEC2MS ( spawnArgs.GetFloat ( "reloadRate", ".12" ) );
 	
-	guideAccelTime = SEC2MS ( spawnArgs.GetFloat ( "lockAccelTime", ".25" ) );
+	guideAccelTime = SEC2MS ( spawnArgs.GetFloat ( "lockAccelTime", ".40" ) );
 	
 	// Start rocket thread
 	rocketThread.SetName ( viewModel->GetName ( ) );
@@ -117,14 +117,14 @@ void rvWeaponRocketLauncher::Spawn ( void ) {
 	animNum = viewModel->GetAnimator()->GetAnim ( "reload" );
 	if ( animNum ) {
 		anim = (idAnim*)viewModel->GetAnimator()->GetAnim ( animNum );
-		rate = (float)anim->Length() / (float)SEC2MS(spawnArgs.GetFloat ( "reloadRate", ".8" ));
+		rate = (float)anim->Length() / (float)SEC2MS(spawnArgs.GetFloat ( "reloadRate", "1.5" ));
 		anim->SetPlaybackRate ( rate );
 	}
 
 	animNum = viewModel->GetAnimator()->GetAnim ( "reload_empty" );
 	if ( animNum ) {
 		anim = (idAnim*)viewModel->GetAnimator()->GetAnim ( animNum );
-		rate = (float)anim->Length() / (float)SEC2MS(spawnArgs.GetFloat ( "reloadRate", ".8" ));
+		rate = (float)anim->Length() / (float)SEC2MS(spawnArgs.GetFloat ( "reloadRate", "2.3" ));
 		anim->SetPlaybackRate ( rate );
 	}
 
@@ -167,7 +167,7 @@ void rvWeaponRocketLauncher::Think ( void ) {
 			// If the rocket is still guiding then stop the guide and slow it down
 			if ( proj->GetGuideType ( ) != idGuidedProjectile::GUIDE_NONE ) {
 				proj->CancelGuide ( );				
-				proj->SetSpeed ( guideSpeedFast, (1.0f - (proj->GetSpeed ( ) - guideSpeedSlow) / (guideSpeedFast - guideSpeedSlow)) * guideAccelTime );
+				proj->SetSpeed ( guideSpeedFast * guideAccelTime / ( 5 - guideSpeedSlow ) );
 			}
 		}
 
@@ -192,7 +192,7 @@ void rvWeaponRocketLauncher::Think ( void ) {
 		
 		// If the rocket isnt guiding yet then adjust its speed back to normal
 		if ( proj->GetGuideType ( ) == idGuidedProjectile::GUIDE_NONE ) {
-			proj->SetSpeed ( guideSpeedSlow, (proj->GetSpeed ( ) - guideSpeedSlow) / (guideSpeedFast - guideSpeedSlow) * guideAccelTime );
+			proj->SetSpeed ( guideSpeedSlow, (proj->GetSpeed ( ) - guideSpeedSlow) / guideAccelTime * 70 );
 		}
 		proj->GuideTo ( tr.endpos );				
 	}
@@ -446,7 +446,7 @@ stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));		
-			Attack ( false, 1, spread, 0, 1.0f );
+			Attack ( false, 12, spread, 0, 1.5f ); //CHANGED
 			PlayAnim ( ANIMCHANNEL_LEGS, "fire", parms.blendFrames );	
 			return SRESULT_STAGE ( STAGE_WAIT );
 	
