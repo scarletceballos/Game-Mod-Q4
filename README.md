@@ -23,6 +23,11 @@ A king of the hill styled mod of Quake 4 with elements of base building with dyn
 	2. Right-click on the shortcut and select "Properties". Select the "Shortcut" tab and in the "Target:" field, type this after the quotes ("...\Quake4.exe"):
 		1. `+set fs_game quake4nite`
 		2. Example: `"C:\Program Files (x86)\Steam\steamapps\common\Quake 4\Quake4.exe" +set fs_game quake4nite`
+
+### To start the mod:
+1. Open Console `CTRL+ALT+~`
+2. Type: `map game/convoy2`
+3. Enjoy!
 ---
 ## Controls 
 `[TODO]`
