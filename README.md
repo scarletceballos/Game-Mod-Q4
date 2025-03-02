@@ -40,6 +40,6 @@ A king of the hill styled mod of Quake 4 with elements of base building with dyn
 
 ## Change Log
 
-- V0.20 - Project Setup / README Creation
+- V0.20 - Attempt at having help screen with keybind and fixed errors from base source
 
 - V0.01 - Project Setup / README Creation
