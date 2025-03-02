@@ -1106,8 +1106,11 @@ idPlayer::idPlayer() {
 
 	hud						= NULL;
 	mphud					= NULL;
+	HelpHud					= NULL;
 	objectiveSystem			= NULL;
+	HelpHud					= NULL;
 	objectiveSystemOpen		= false;
+	helpscreenOpen			= false;
 	showNewObjectives		= false;
 #ifdef _XENON
 	g_ObjectiveSystemOpen	= false;
@@ -7969,6 +7972,47 @@ void idPlayer::ToggleObjectives ( void ) {
 
 /*
 ==============
+idPlayer::ToggleHelp
+==============
+*/
+
+//void idPlayer::ToggleHelp(void) {
+//	if (HelpHud == NULL) {
+//		return;
+//	}
+//
+//	if (!helpscreenOpen) {
+//		HelpHud->Activate(true, gameLocal.time);
+//		HelpHud->HandleNamedEvent("helpscreenshow");
+//
+//	}
+//	else {
+//		HelpHud->Activate(false, gameLocal.time);
+//		HelpHud->HandleNamedEvent("helpscreenhide");
+//	}
+//}
+	/*
+==============
+idPlayer::ToggleHelp
+==============
+*/
+
+//void idPlayer::ToggleObjectives(void) {
+//	if (HelpHud == NULL) {
+//		return;
+//	}
+//
+//	if (!helpscreenOpen) {
+//	HelpHud->Activate(true, gameLocal.time);
+//	HelpHud->HandleNamedEvent("helpscreenshow");
+//
+//	} else {
+//	 objectiveSystem->Activate(false, gameLocal.time);
+//	 objectiveSystem->HandleNamedEvent("helpscreenhide");
+//}
+
+/*
+==============
 idPlayer::ToggleScoreboard
 ==============
 */
@@ -8550,6 +8594,11 @@ void idPlayer::PerformImpulse( int impulse ) {
    			}
    			break;
    		}
+
+		case IMPULSE_23: {
+			HelpHud = uiManager->FindGui("guis/help.gui", true, false, true);
+			break;
+		}
 				
 		case IMPULSE_28: {
  			if ( gameLocal.isClient || entityNumber == gameLocal.localClientNum ) {

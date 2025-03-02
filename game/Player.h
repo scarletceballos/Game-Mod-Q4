@@ -343,7 +343,9 @@ public:
 	
 	idUserInterface *		objectiveSystem;
 	idUserInterface *		cinematicHud;
+	idUserInterface *		HelpHud; // custom help hud
 	bool					objectiveSystemOpen;
+	bool					helpscreenOpen; // help open screen
 	bool					objectiveButtonReleased;
 	bool					disableHud;
 	bool					showNewObjectives;
