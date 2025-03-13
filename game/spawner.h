@@ -55,6 +55,7 @@ public:
 
 	void				AddCallback				( idEntity* owner, const idEventDef* ev );
 
+	void                Event_Activate(idEntity* activator);
 protected:
 
 	int								numSpawned;
@@ -92,9 +93,11 @@ protected:
 	// Copy key/values from the given entity to the given dictionary using the specified prefix
 	void				CopyPrefixedSpawnArgs	( idEntity *src, const char *prefix, idDict &args );
 
+
+
 private:
 
-	void				Event_Activate			( idEntity *activator );
+	//void				Event_Activate			( idEntity *activator );
 	void				Event_RemoveNullActiveEntities( void );
 	void				Event_NumActiveEntities	( void );
 	void				Event_GetActiveEntity	( int index );

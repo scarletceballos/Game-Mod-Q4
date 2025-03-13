@@ -1413,16 +1413,16 @@ void idClass::RegisterClasses( void )
 	REGISTER(rvViewWeapon); // ..\..\code\game\Weapon.cpp
 	REGISTER(rvWeapon); // ..\..\code\game\Weapon.cpp
 	REGISTER(rvWeaponBlaster); // ..\..\code\game\weapon\WeaponBlaster.cpp
-	REGISTER(rvWeaponDarkMatterGun); // ..\..\code\game\weapon\WeaponDarkMatterGun.cpp
+	REGISTER(rvWeaponbackbreaker); // ..\..\code\game\weapon\WeaponDarkMatterGun.cpp
 	REGISTER(rvWeaponGauntlet); // ..\..\code\game\weapon\WeaponGauntlet.cpp
 	REGISTER(rvWeaponGrenadeLauncher); // ..\..\code\game\weapon\WeaponGrenadeLauncher.cpp
-	REGISTER(rvWeaponHyperblaster); // ..\..\code\game\weapon\WeaponHyperblaster.cpp
-	REGISTER(rvWeaponLightningGun); // ..\..\code\game\weapon\WeaponLightningGun.cpp
-	REGISTER(rvWeaponMachinegun); // ..\..\code\game\weapon\WeaponMachinegun.cpp
-	REGISTER(rvWeaponNailgun); // ..\..\code\game\weapon\WeaponNailgun.cpp
-	REGISTER(rvWeaponRailgun); // ..\..\code\game\weapon\WeaponRailgun.cpp
-	REGISTER(rvWeaponRocketLauncher); // ..\..\code\game\weapon\WeaponRocketLauncher.cpp
-	REGISTER(rvWeaponShotgun); // ..\..\code\game\weapon\WeaponShotgun.cpp
+	REGISTER(rvWeaponfobr); // ..\..\code\game\weapon\WeaponHyperblaster.cpp
+	REGISTER(rvWeaponzapotron); // ..\..\code\game\weapon\WeaponLightningGun.cpp
+	REGISTER(rvWeaponLightMachinegun); // ..\..\code\game\weapon\WeaponMachinegun.cpp
+	REGISTER(rvWeaponNailer); // ..\..\code\game\weapon\WeaponNailgun.cpp
+	REGISTER(rvWeaponStickyRailgun); // ..\..\code\game\weapon\WeaponRailgun.cpp
+	REGISTER(rvWeaponAnvilRocketLauncher); // ..\..\code\game\weapon\WeaponRocketLauncher.cpp
+	REGISTER(rvWeaponlongarmenforcer); // ..\..\code\game\weapon\WeaponShotgun.cpp
 // RITUAL BEGIN
 	REGISTER(riDeadZonePowerup); // ..\..\code\game\Item.cpp
 	REGISTER(WeaponNapalmGun);	// ..\..\code\game\weapon\WeaponNapalmGun.cpp

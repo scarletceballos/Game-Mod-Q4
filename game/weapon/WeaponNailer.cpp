@@ -25,13 +25,13 @@ const int NAILGUN_MOD_SEEK				= BIT(1);
 
 const int NAILGUN_SPIN_SNDCHANNEL		= SND_CHANNEL_BODY2;
 
-class rvWeaponNailgun : public rvWeapon {
+class rvWeaponNailer : public rvWeapon {
 public:
 
-	CLASS_PROTOTYPE( rvWeaponNailgun );
+	CLASS_PROTOTYPE( rvWeaponNailer );
 
-	rvWeaponNailgun ( void );
-	~rvWeaponNailgun ( void );
+	rvWeaponNailer ( void );
+	~rvWeaponNailer ( void );
 
 	virtual void		Spawn					( void );
 	virtual void		Think					( void );
@@ -82,26 +82,26 @@ private:
 	stateResult_t		Frame_ClaspOpen			( const stateParms_t& parms );
 	stateResult_t		Frame_ClaspClose		( const stateParms_t& parms );	
 	
-	CLASS_STATES_PROTOTYPE ( rvWeaponNailgun );
+	CLASS_STATES_PROTOTYPE ( rvWeaponNailer );
 };
 
-CLASS_DECLARATION( rvWeapon, rvWeaponNailgun )
+CLASS_DECLARATION( rvWeapon, rvWeaponNailer )
 END_CLASS
 
 /*
 ================
-rvWeaponNailgun::rvWeaponNailgun
+rvWeaponNailer::rvWeaponNailer
 ================
 */
-rvWeaponNailgun::rvWeaponNailgun ( void ) {
+rvWeaponNailer::rvWeaponNailer ( void ) {
 }
 
 /*
 ================
-rvWeaponNailgun::~rvWeaponNailgun
+rvWeaponNailer::~rvWeaponNailer
 ================
 */
-rvWeaponNailgun::~rvWeaponNailgun ( void ) {
+rvWeaponNailer::~rvWeaponNailer ( void ) {
 	if ( guideEffect ) {
 		guideEffect->Stop();
 	}
@@ -113,10 +113,10 @@ rvWeaponNailgun::~rvWeaponNailgun ( void ) {
 
 /*
 ================
-rvWeaponNailgun::Spawn
+rvWeaponNailer::Spawn
 ================
 */
-void rvWeaponNailgun::Spawn ( void ) {
+void rvWeaponNailer::Spawn ( void ) {
 	spawnArgs.GetFloat ( "lockRange", "1000", guideRange );
 	guideHoldTime = SEC2MS ( spawnArgs.GetFloat ( "lockHoldTime", "10" ) );
 	guideAquireTime = SEC2MS ( spawnArgs.GetFloat ( "lockAquireTime", ".1" ) );
@@ -138,10 +138,10 @@ void rvWeaponNailgun::Spawn ( void ) {
 
 /*
 ================
-rvWeaponNailgun::Save
+rvWeaponNailer::Save
 ================
 */
-void rvWeaponNailgun::Save ( idSaveGame *savefile ) const {
+void rvWeaponNailer::Save ( idSaveGame *savefile ) const {
 	guideEnt.Save( savefile );
 	savefile->WriteInt( guideTime );
 	savefile->WriteInt( guideStartTime );
@@ -164,10 +164,10 @@ void rvWeaponNailgun::Save ( idSaveGame *savefile ) const {
 
 /*
 ================
-rvWeaponNailgun::Restore
+rvWeaponNailer::Restore
 ================
 */
-void rvWeaponNailgun::Restore ( idRestoreGame *savefile ) {
+void rvWeaponNailer::Restore ( idRestoreGame *savefile ) {
 	guideEnt.Restore( savefile );
 	savefile->ReadInt( guideTime );
 	savefile->ReadInt( guideStartTime );
@@ -191,10 +191,10 @@ void rvWeaponNailgun::Restore ( idRestoreGame *savefile ) {
 
 /*
 ================
-rvWeaponNailgun::PreSave
+rvWeaponNailer::PreSave
 ================
 */
-void rvWeaponNailgun::PreSave ( void ) {
+void rvWeaponNailer::PreSave ( void ) {
 
 	//disable sounds
 	StopSound( SND_CHANNEL_ANY, false);
@@ -209,10 +209,10 @@ void rvWeaponNailgun::PreSave ( void ) {
 
 /*
 ================
-rvWeaponNailgun::PostSave
+rvWeaponNailer::PostSave
 ================
 */
-void rvWeaponNailgun::PostSave ( void ) {
+void rvWeaponNailer::PostSave ( void ) {
 
 	//restore sounds-- but which one?
 	if( drumSpeed == NAILGUN_DRUMSPEED_FAST )	{
@@ -226,10 +226,10 @@ void rvWeaponNailgun::PostSave ( void ) {
 
 /*
 ================
-rvWeaponNailgun::CancelGuide
+rvWeaponNailer::CancelGuide
 ================
 */
-void rvWeaponNailgun::CancelGuide ( void ) {
+void rvWeaponNailer::CancelGuide ( void ) {
 	if ( zoomGui && guideEnt ) {
 		zoomGui->HandleNamedEvent ( "lockStop" );
 	}
@@ -242,10 +242,10 @@ void rvWeaponNailgun::CancelGuide ( void ) {
 
 /*
 ================
-rvWeaponNailgun::UpdateGuideStatus
+rvWeaponNailer::UpdateGuideStatus
 ================
 */
-void rvWeaponNailgun::UpdateGuideStatus ( float range ) {
+void rvWeaponNailer::UpdateGuideStatus ( float range ) {
 	// Update the zoom GUI variables
 	if ( zoomGui ) {
 		float lockStatus;
@@ -308,10 +308,10 @@ void rvWeaponNailgun::UpdateGuideStatus ( float range ) {
 
 /*
 ================
-rvWeaponNailgun::Think
+rvWeaponNailer::Think
 ================
 */
-void rvWeaponNailgun::Think ( void ) {
+void rvWeaponNailer::Think ( void ) {
 	idEntity* ent;
 	trace_t	  tr;
 
@@ -407,10 +407,10 @@ void rvWeaponNailgun::Think ( void ) {
 
 /*
 ================
-rvWeaponNailgun::OnLaunchProjectile
+rvWeaponNailer::OnLaunchProjectile
 ================
 */
-void rvWeaponNailgun::OnLaunchProjectile ( idProjectile* proj ) {
+void rvWeaponNailer::OnLaunchProjectile ( idProjectile* proj ) {
 	rvWeapon::OnLaunchProjectile(proj);
 
 	idGuidedProjectile* guided;
@@ -422,12 +422,12 @@ void rvWeaponNailgun::OnLaunchProjectile ( idProjectile* proj ) {
 
 /*
 ================
-rvWeaponNailgun::DrumSpin
+rvWeaponNailer::DrumSpin
 
 Set the drum spin speed 
 ================
 */
-bool rvWeaponNailgun::DrumSpin ( int speed, int blendFrames ) {
+bool rvWeaponNailer::DrumSpin ( int speed, int blendFrames ) {
 	// Dont bother if the drum is already spinning at the desired speed
 	if ( drumSpeedIdeal == speed ) {
 		return false;
@@ -483,27 +483,27 @@ bool rvWeaponNailgun::DrumSpin ( int speed, int blendFrames ) {
 ===============================================================================
 */
 
-CLASS_STATES_DECLARATION ( rvWeaponNailgun )
-	STATE ( "Raise",						rvWeaponNailgun::State_Raise )
-	STATE ( "Lower",						rvWeaponNailgun::State_Lower )
-	STATE ( "Idle",							rvWeaponNailgun::State_Idle)
-	STATE ( "Fire",							rvWeaponNailgun::State_Fire )
-	STATE ( "Reload",						rvWeaponNailgun::State_Reload )
-	STATE ( "DrumSpinDown",					rvWeaponNailgun::State_DrumSpinDown )
-	STATE ( "DrumSpinUp",					rvWeaponNailgun::State_DrumSpinUp )
+CLASS_STATES_DECLARATION ( rvWeaponNailer )
+	STATE ( "Raise",						rvWeaponNailer::State_Raise )
+	STATE ( "Lower",						rvWeaponNailer::State_Lower )
+	STATE ( "Idle",							rvWeaponNailer::State_Idle)
+	STATE ( "Fire",							rvWeaponNailer::State_Fire )
+	STATE ( "Reload",						rvWeaponNailer::State_Reload )
+	STATE ( "DrumSpinDown",					rvWeaponNailer::State_DrumSpinDown )
+	STATE ( "DrumSpinUp",					rvWeaponNailer::State_DrumSpinUp )
 	
-	STATE ( "ClaspOpen",					rvWeaponNailgun::Frame_ClaspOpen )
-	STATE ( "ClaspClose",					rvWeaponNailgun::Frame_ClaspClose )
+	STATE ( "ClaspOpen",					rvWeaponNailer::Frame_ClaspOpen )
+	STATE ( "ClaspClose",					rvWeaponNailer::Frame_ClaspClose )
 END_CLASS_STATES
 
 /*
 ================
-rvWeaponNailgun::State_Raise
+rvWeaponNailer::State_Raise
 
 Raise the weapon
 ================
 */
-stateResult_t rvWeaponNailgun::State_Raise ( const stateParms_t& parms ) {
+stateResult_t rvWeaponNailer::State_Raise ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -532,12 +532,12 @@ stateResult_t rvWeaponNailgun::State_Raise ( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponNailgun::State_Lower
+rvWeaponNailer::State_Lower
 
 Lower the weapon
 ================
 */
-stateResult_t rvWeaponNailgun::State_Lower ( const stateParms_t& parms ) {	
+stateResult_t rvWeaponNailer::State_Lower ( const stateParms_t& parms ) {	
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -571,12 +571,12 @@ stateResult_t rvWeaponNailgun::State_Lower ( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponNailgun::State_Idle
+rvWeaponNailer::State_Idle
 
 Manage the idle state of the weapon
 ================
 */
-stateResult_t rvWeaponNailgun::State_Idle( const stateParms_t& parms ) {
+stateResult_t rvWeaponNailer::State_Idle( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -629,12 +629,12 @@ stateResult_t rvWeaponNailgun::State_Idle( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponNailgun::State_Fire
+rvWeaponNailer::State_Fire
 
 Fire the weapon
 ================
 */
-stateResult_t rvWeaponNailgun::State_Fire( const stateParms_t& parms ) {
+stateResult_t rvWeaponNailer::State_Fire( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_FIRE,
@@ -716,10 +716,10 @@ stateResult_t rvWeaponNailgun::State_Fire( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponNailgun::State_Reload
+rvWeaponNailer::State_Reload
 ================
 */
-stateResult_t rvWeaponNailgun::State_Reload ( const stateParms_t& parms ) {
+stateResult_t rvWeaponNailer::State_Reload ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_RELOAD,
@@ -821,12 +821,12 @@ stateResult_t rvWeaponNailgun::State_Reload ( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponNailgun::State_DrumSpinUp
+rvWeaponNailer::State_DrumSpinUp
 
 Spin the drum from a slow speed to a fast speed
 ================
 */
-stateResult_t rvWeaponNailgun::State_DrumSpinUp ( const stateParms_t& parms ) {
+stateResult_t rvWeaponNailer::State_DrumSpinUp ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -856,12 +856,12 @@ stateResult_t rvWeaponNailgun::State_DrumSpinUp ( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponNailgun::State_DrumSpinDown
+rvWeaponNailer::State_DrumSpinDown
 
 Spin the drum down from a faster speed
 ================
 */
-stateResult_t rvWeaponNailgun::State_DrumSpinDown ( const stateParms_t& parms ) {
+stateResult_t rvWeaponNailer::State_DrumSpinDown ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -900,26 +900,26 @@ stateResult_t rvWeaponNailgun::State_DrumSpinDown ( const stateParms_t& parms ) 
 
 /*
 ================
-rvWeaponNailgun::Frame_ClaspOpen
+rvWeaponNailer::Frame_ClaspOpen
 
 Open the clasp that holds in the clips
 ================
 */
-stateResult_t rvWeaponNailgun::Frame_ClaspOpen ( const stateParms_t& parms ) {
+stateResult_t rvWeaponNailer::Frame_ClaspOpen ( const stateParms_t& parms ) {
 	PlayAnim ( ANIMCHANNEL_TORSO, "clasp_open", 0 );
 	return SRESULT_OK;
 }
 
 /*
 ================
-rvWeaponNailgun::Frame_ClaspOpen
+rvWeaponNailer::Frame_ClaspOpen
 
 Close the clasp that holds in the clips and make sure to use the
 correct positioning depending on whether you have one or two clips
 in the gun.
 ================
 */
-stateResult_t rvWeaponNailgun::Frame_ClaspClose ( const stateParms_t& parms ) {
+stateResult_t rvWeaponNailer::Frame_ClaspClose ( const stateParms_t& parms ) {
 	if ( mods & NAILGUN_MOD_ROF_AMMO ) {
 		PlayAnim( ANIMCHANNEL_TORSO, "clasp_2clip", 0 );
 	} else {

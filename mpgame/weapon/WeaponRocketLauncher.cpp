@@ -9,13 +9,13 @@
 #include "../Projectile.h"
 #endif
 
-class rvWeaponRocketLauncher : public rvWeapon {
+class rvWeaponAnvilRocketLauncher : public rvWeapon {
 public:
 
-	CLASS_PROTOTYPE( rvWeaponRocketLauncher );
+	CLASS_PROTOTYPE( rvWeaponAnvilRocketLauncher );
 
-	rvWeaponRocketLauncher ( void );
-	~rvWeaponRocketLauncher ( void );
+	rvWeaponAnvilRocketLauncher ( void );
+	~rvWeaponAnvilRocketLauncher ( void );
 
 	virtual void			Spawn				( void );
 	virtual void			Think				( void );
@@ -61,26 +61,26 @@ private:
 	
 	stateResult_t		Frame_AddToClip			( const stateParms_t& parms );
 	
-	CLASS_STATES_PROTOTYPE ( rvWeaponRocketLauncher );
+	CLASS_STATES_PROTOTYPE ( rvWeaponAnvilRocketLauncher );
 };
 
-CLASS_DECLARATION( rvWeapon, rvWeaponRocketLauncher )
+CLASS_DECLARATION( rvWeapon, rvWeaponAnvilRocketLauncher )
 END_CLASS
 
 /*
 ================
-rvWeaponRocketLauncher::rvWeaponRocketLauncher
+rvWeaponAnvilRocketLauncher::rvWeaponAnvilRocketLauncher
 ================
 */
-rvWeaponRocketLauncher::rvWeaponRocketLauncher ( void ) {
+rvWeaponAnvilRocketLauncher::rvWeaponAnvilRocketLauncher ( void ) {
 }
 
 /*
 ================
-rvWeaponRocketLauncher::~rvWeaponRocketLauncher
+rvWeaponAnvilRocketLauncher::~rvWeaponAnvilRocketLauncher
 ================
 */
-rvWeaponRocketLauncher::~rvWeaponRocketLauncher ( void ) {
+rvWeaponAnvilRocketLauncher::~rvWeaponAnvilRocketLauncher ( void ) {
 	if ( guideEffect ) {
 		guideEffect->Stop();
 	}
@@ -88,10 +88,10 @@ rvWeaponRocketLauncher::~rvWeaponRocketLauncher ( void ) {
 
 /*
 ================
-rvWeaponRocketLauncher::Spawn
+rvWeaponAnvilRocketLauncher::Spawn
 ================
 */
-void rvWeaponRocketLauncher::Spawn ( void ) {
+void rvWeaponAnvilRocketLauncher::Spawn ( void ) {
 	float f;
 
 	idleEmpty = false;
@@ -134,10 +134,10 @@ void rvWeaponRocketLauncher::Spawn ( void ) {
 
 /*
 ================
-rvWeaponRocketLauncher::Think
+rvWeaponAnvilRocketLauncher::Think
 ================
 */
-void rvWeaponRocketLauncher::Think ( void ) {	
+void rvWeaponAnvilRocketLauncher::Think ( void ) {	
 	trace_t	tr;
 	int		i;
 
@@ -207,10 +207,10 @@ void rvWeaponRocketLauncher::Think ( void ) {
 
 /*
 ================
-rvWeaponRocketLauncher::OnLaunchProjectile
+rvWeaponAnvilRocketLauncher::OnLaunchProjectile
 ================
 */
-void rvWeaponRocketLauncher::OnLaunchProjectile ( idProjectile* proj ) {
+void rvWeaponAnvilRocketLauncher::OnLaunchProjectile ( idProjectile* proj ) {
 	rvWeapon::OnLaunchProjectile(proj);
 
 	// Double check that its actually a guided projectile
@@ -226,19 +226,19 @@ void rvWeaponRocketLauncher::OnLaunchProjectile ( idProjectile* proj ) {
 
 /*
 ================
-rvWeaponRocketLauncher::SetRocketState
+rvWeaponAnvilRocketLauncher::SetRocketState
 ================
 */
-void rvWeaponRocketLauncher::SetRocketState ( const char* state, int blendFrames ) {
+void rvWeaponAnvilRocketLauncher::SetRocketState ( const char* state, int blendFrames ) {
 	rocketThread.SetState ( state, blendFrames );
 }
 
 /*
 =====================
-rvWeaponRocketLauncher::Save
+rvWeaponAnvilRocketLauncher::Save
 =====================
 */
-void rvWeaponRocketLauncher::Save( idSaveGame *saveFile ) const {
+void rvWeaponAnvilRocketLauncher::Save( idSaveGame *saveFile ) const {
 	saveFile->WriteObject( guideEffect );
 
 	idEntity* ent = NULL;
@@ -262,10 +262,10 @@ void rvWeaponRocketLauncher::Save( idSaveGame *saveFile ) const {
 
 /*
 =====================
-rvWeaponRocketLauncher::Restore
+rvWeaponAnvilRocketLauncher::Restore
 =====================
 */
-void rvWeaponRocketLauncher::Restore( idRestoreGame *saveFile ) {
+void rvWeaponAnvilRocketLauncher::Restore( idRestoreGame *saveFile ) {
 	int numEnts = 0;
 	idEntity* ent = NULL;
 	rvClientEffect* clientEffect = NULL;
@@ -293,18 +293,18 @@ void rvWeaponRocketLauncher::Restore( idRestoreGame *saveFile ) {
 
 /*
 ================
-rvWeaponRocketLauncher::PreSave
+rvWeaponAnvilRocketLauncher::PreSave
 ================
 */
-void rvWeaponRocketLauncher::PreSave ( void ) {
+void rvWeaponAnvilRocketLauncher::PreSave ( void ) {
 }
 
 /*
 ================
-rvWeaponRocketLauncher::PostSave
+rvWeaponAnvilRocketLauncher::PostSave
 ================
 */
-void rvWeaponRocketLauncher::PostSave ( void ) {
+void rvWeaponAnvilRocketLauncher::PostSave ( void ) {
 }
 
 
@@ -316,27 +316,27 @@ void rvWeaponRocketLauncher::PostSave ( void ) {
 ===============================================================================
 */
 
-CLASS_STATES_DECLARATION ( rvWeaponRocketLauncher )
-	STATE ( "Idle",				rvWeaponRocketLauncher::State_Idle)
-	STATE ( "Fire",				rvWeaponRocketLauncher::State_Fire )
-	STATE ( "Raise",			rvWeaponRocketLauncher::State_Raise )
-	STATE ( "Lower",			rvWeaponRocketLauncher::State_Lower )
+CLASS_STATES_DECLARATION ( rvWeaponAnvilRocketLauncher )
+	STATE ( "Idle",				rvWeaponAnvilRocketLauncher::State_Idle)
+	STATE ( "Fire",				rvWeaponAnvilRocketLauncher::State_Fire )
+	STATE ( "Raise",			rvWeaponAnvilRocketLauncher::State_Raise )
+	STATE ( "Lower",			rvWeaponAnvilRocketLauncher::State_Lower )
 
-	STATE ( "Rocket_Idle",		rvWeaponRocketLauncher::State_Rocket_Idle )
-	STATE ( "Rocket_Reload",	rvWeaponRocketLauncher::State_Rocket_Reload )
+	STATE ( "Rocket_Idle",		rvWeaponAnvilRocketLauncher::State_Rocket_Idle )
+	STATE ( "Rocket_Reload",	rvWeaponAnvilRocketLauncher::State_Rocket_Reload )
 	
-	STATE ( "AddToClip",		rvWeaponRocketLauncher::Frame_AddToClip )
+	STATE ( "AddToClip",		rvWeaponAnvilRocketLauncher::Frame_AddToClip )
 END_CLASS_STATES
 
 
 /*
 ================
-rvWeaponRocketLauncher::State_Raise
+rvWeaponAnvilRocketLauncher::State_Raise
 
 Raise the weapon
 ================
 */
-stateResult_t rvWeaponRocketLauncher::State_Raise ( const stateParms_t& parms ) {
+stateResult_t rvWeaponAnvilRocketLauncher::State_Raise ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -364,12 +364,12 @@ stateResult_t rvWeaponRocketLauncher::State_Raise ( const stateParms_t& parms ) 
 
 /*
 ================
-rvWeaponRocketLauncher::State_Lower
+rvWeaponAnvilRocketLauncher::State_Lower
 
 Lower the weapon
 ================
 */
-stateResult_t rvWeaponRocketLauncher::State_Lower ( const stateParms_t& parms ) {	
+stateResult_t rvWeaponAnvilRocketLauncher::State_Lower ( const stateParms_t& parms ) {	
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -400,10 +400,10 @@ stateResult_t rvWeaponRocketLauncher::State_Lower ( const stateParms_t& parms ) 
 
 /*
 ================
-rvWeaponRocketLauncher::State_Idle
+rvWeaponAnvilRocketLauncher::State_Idle
 ================
 */
-stateResult_t rvWeaponRocketLauncher::State_Idle( const stateParms_t& parms ) {
+stateResult_t rvWeaponAnvilRocketLauncher::State_Idle( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -435,10 +435,10 @@ stateResult_t rvWeaponRocketLauncher::State_Idle( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponRocketLauncher::State_Fire
+rvWeaponAnvilRocketLauncher::State_Fire
 ================
 */
-stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
+stateResult_t rvWeaponAnvilRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -466,10 +466,10 @@ stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponRocketLauncher::State_Rocket_Idle
+rvWeaponAnvilRocketLauncher::State_Rocket_Idle
 ================
 */
-stateResult_t rvWeaponRocketLauncher::State_Rocket_Idle ( const stateParms_t& parms ) {
+stateResult_t rvWeaponAnvilRocketLauncher::State_Rocket_Idle ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -512,10 +512,10 @@ stateResult_t rvWeaponRocketLauncher::State_Rocket_Idle ( const stateParms_t& pa
 
 /*
 ================
-rvWeaponRocketLauncher::State_Rocket_Reload
+rvWeaponAnvilRocketLauncher::State_Rocket_Reload
 ================
 */
-stateResult_t rvWeaponRocketLauncher::State_Rocket_Reload ( const stateParms_t& parms ) {
+stateResult_t rvWeaponAnvilRocketLauncher::State_Rocket_Reload ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -573,10 +573,10 @@ stateResult_t rvWeaponRocketLauncher::State_Rocket_Reload ( const stateParms_t& 
 
 /*
 ================
-rvWeaponRocketLauncher::Frame_AddToClip
+rvWeaponAnvilRocketLauncher::Frame_AddToClip
 ================
 */
-stateResult_t rvWeaponRocketLauncher::Frame_AddToClip ( const stateParms_t& parms ) {
+stateResult_t rvWeaponAnvilRocketLauncher::Frame_AddToClip ( const stateParms_t& parms ) {
 	AddToClip ( 1 );
 	return SRESULT_OK;
 }

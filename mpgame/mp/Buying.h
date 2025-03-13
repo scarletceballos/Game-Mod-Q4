@@ -31,6 +31,8 @@ public:
 	int GetOpponentKillCashAward( void );
 
 	void Reset( void ) { opponentKillFragCount = -1; }
+	bool canBuyWeapon(const idDict& inventory, const char* weaponName);
+	void BuyWeapon(idPlayer* player, const char* weaponName);
 };
 
 

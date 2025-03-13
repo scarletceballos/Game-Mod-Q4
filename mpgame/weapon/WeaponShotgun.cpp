@@ -6,12 +6,12 @@
 
 const int SHOTGUN_MOD_AMMO = BIT(0);
 
-class rvWeaponShotgun : public rvWeapon {
+class rvWeaponlongarmenforcer : public rvWeapon {
 public:
 
-	CLASS_PROTOTYPE( rvWeaponShotgun );
+	CLASS_PROTOTYPE( rvWeaponlongarmenforcer );
 
-	rvWeaponShotgun ( void );
+	rvWeaponlongarmenforcer ( void );
 
 	virtual void			Spawn				( void );
 	void					Save				( idSaveGame *savefile ) const;
@@ -28,26 +28,26 @@ private:
 	stateResult_t		State_Fire		( const stateParms_t& parms );
 	stateResult_t		State_Reload	( const stateParms_t& parms );
 	
-	CLASS_STATES_PROTOTYPE( rvWeaponShotgun );
+	CLASS_STATES_PROTOTYPE( rvWeaponlongarmenforcer );
 };
 
-CLASS_DECLARATION( rvWeapon, rvWeaponShotgun )
+CLASS_DECLARATION( rvWeapon, rvWeaponlongarmenforcer )
 END_CLASS
 
 /*
 ================
-rvWeaponShotgun::rvWeaponShotgun
+rvWeaponlongarmenforcer::rvWeaponlongarmenforcer
 ================
 */
-rvWeaponShotgun::rvWeaponShotgun( void ) {
+rvWeaponlongarmenforcer::rvWeaponlongarmenforcer( void ) {
 }
 
 /*
 ================
-rvWeaponShotgun::Spawn
+rvWeaponlongarmenforcer::Spawn
 ================
 */
-void rvWeaponShotgun::Spawn( void ) {
+void rvWeaponlongarmenforcer::Spawn( void ) {
 	hitscans   = spawnArgs.GetFloat( "hitscans" );
 	
 	SetState( "Raise", 0 );	
@@ -55,35 +55,35 @@ void rvWeaponShotgun::Spawn( void ) {
 
 /*
 ================
-rvWeaponShotgun::Save
+rvWeaponlongarmenforcer::Save
 ================
 */
-void rvWeaponShotgun::Save( idSaveGame *savefile ) const {
+void rvWeaponlongarmenforcer::Save( idSaveGame *savefile ) const {
 }
 
 /*
 ================
-rvWeaponShotgun::Restore
+rvWeaponlongarmenforcer::Restore
 ================
 */
-void rvWeaponShotgun::Restore( idRestoreGame *savefile ) {
+void rvWeaponlongarmenforcer::Restore( idRestoreGame *savefile ) {
 	hitscans   = spawnArgs.GetFloat( "hitscans" );
 }
 
 /*
 ================
-rvWeaponShotgun::PreSave
+rvWeaponlongarmenforcer::PreSave
 ================
 */
-void rvWeaponShotgun::PreSave ( void ) {
+void rvWeaponlongarmenforcer::PreSave ( void ) {
 }
 
 /*
 ================
-rvWeaponShotgun::PostSave
+rvWeaponlongarmenforcer::PostSave
 ================
 */
-void rvWeaponShotgun::PostSave ( void ) {
+void rvWeaponlongarmenforcer::PostSave ( void ) {
 }
 
 
@@ -95,18 +95,18 @@ void rvWeaponShotgun::PostSave ( void ) {
 ===============================================================================
 */
 
-CLASS_STATES_DECLARATION( rvWeaponShotgun )
-	STATE( "Idle",				rvWeaponShotgun::State_Idle)
-	STATE( "Fire",				rvWeaponShotgun::State_Fire )
-	STATE( "Reload",			rvWeaponShotgun::State_Reload )
+CLASS_STATES_DECLARATION( rvWeaponlongarmenforcer )
+	STATE( "Idle",				rvWeaponlongarmenforcer::State_Idle)
+	STATE( "Fire",				rvWeaponlongarmenforcer::State_Fire )
+	STATE( "Reload",			rvWeaponlongarmenforcer::State_Reload )
 END_CLASS_STATES
 
 /*
 ================
-rvWeaponShotgun::State_Idle
+rvWeaponlongarmenforcer::State_Idle
 ================
 */
-stateResult_t rvWeaponShotgun::State_Idle( const stateParms_t& parms ) {
+stateResult_t rvWeaponlongarmenforcer::State_Idle( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -153,10 +153,10 @@ stateResult_t rvWeaponShotgun::State_Idle( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponShotgun::State_Fire
+rvWeaponlongarmenforcer::State_Fire
 ================
 */
-stateResult_t rvWeaponShotgun::State_Fire( const stateParms_t& parms ) {
+stateResult_t rvWeaponlongarmenforcer::State_Fire( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -190,10 +190,10 @@ stateResult_t rvWeaponShotgun::State_Fire( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponShotgun::State_Reload
+rvWeaponlongarmenforcer::State_Reload
 ================
 */
-stateResult_t rvWeaponShotgun::State_Reload ( const stateParms_t& parms ) {
+stateResult_t rvWeaponlongarmenforcer::State_Reload ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,

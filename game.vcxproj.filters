@@ -459,37 +459,37 @@
     <ClCompile Include="game\weapon\WeaponBlaster.cpp">
       <Filter>Game\Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="game\weapon\WeaponDarkMatterGun.cpp">
+    <ClCompile Include="game\weapon\Weaponbackbreaker.cpp">
       <Filter>Game\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="game\weapon\WeaponGauntlet.cpp">
       <Filter>Game\Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="game\weapon\WeaponGrenadeLauncher.cpp">
+    <ClCompile Include="game\weapon\WeaponFloorLauncher.cpp">
       <Filter>Game\Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="game\weapon\WeaponHyperblaster.cpp">
+    <ClCompile Include="game\weapon\Weaponfobr.cpp">
       <Filter>Game\Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="game\weapon\WeaponLightningGun.cpp">
+    <ClCompile Include="game\weapon\Weaponzapotron.cpp">
       <Filter>Game\Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="game\weapon\WeaponMachinegun.cpp">
+    <ClCompile Include="game\weapon\WeaponLightMachinegun.cpp">
       <Filter>Game\Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="game\weapon\WeaponNailgun.cpp">
+    <ClCompile Include="game\weapon\WeaponNailer.cpp">
       <Filter>Game\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="game\weapon\WeaponNapalmGun.cpp">
       <Filter>Game\Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="game\weapon\WeaponRailgun.cpp">
+    <ClCompile Include="game\weapon\WeaponStickyRailgun.cpp">
       <Filter>Game\Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="game\weapon\WeaponRocketLauncher.cpp">
+    <ClCompile Include="game\weapon\WeaponAnvilRocketLauncher.cpp">
       <Filter>Game\Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="game\weapon\WeaponShotgun.cpp">
+    <ClCompile Include="game\weapon\Weaponlongarmenforcer.cpp">
       <Filter>Game\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="game\mp\Buying.cpp">
@@ -515,6 +515,12 @@
     </ClCompile>
     <ClCompile Include="game\mp\stats\StatWindow.cpp">
       <Filter>Game\MP\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="game\weapon\WeaponWallLauncher.cpp">
+      <Filter>Game\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="game\TriggerBuyMenu.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -829,6 +835,9 @@
     </ClInclude>
     <ClInclude Include="game\mp\stats\StatWindow.h">
       <Filter>Game\MP\Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="game\TriggerBuyMenu.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

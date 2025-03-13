@@ -6,12 +6,12 @@
 
 const idEventDef EV_Railgun_RestoreHum( "<railgunRestoreHum>", "" );
 
-class rvWeaponRailgun : public rvWeapon {
+class rvWeaponStickyRailgun : public rvWeapon {
 public:
 
-	CLASS_PROTOTYPE( rvWeaponRailgun );
+	CLASS_PROTOTYPE( rvWeaponStickyRailgun );
 
-	rvWeaponRailgun ( void );
+	rvWeaponStickyRailgun ( void );
 
 	virtual void			Spawn				( void );
 	virtual void			Think				( void );
@@ -32,54 +32,54 @@ private:
 
 	void				Event_RestoreHum	( void );
 
-	CLASS_STATES_PROTOTYPE ( rvWeaponRailgun );
+	CLASS_STATES_PROTOTYPE ( rvWeaponStickyRailgun );
 };
 
-CLASS_DECLARATION( rvWeapon, rvWeaponRailgun )
-	EVENT( EV_Railgun_RestoreHum,			rvWeaponRailgun::Event_RestoreHum )
+CLASS_DECLARATION( rvWeapon, rvWeaponStickyRailgun )
+	EVENT( EV_Railgun_RestoreHum,			rvWeaponStickyRailgun::Event_RestoreHum )
 END_CLASS
 
 /*
 ================
-rvWeaponRailgun::rvWeaponRailgun
+rvWeaponStickyRailgun::rvWeaponStickyRailgun
 ================
 */
-rvWeaponRailgun::rvWeaponRailgun ( void ) {
+rvWeaponStickyRailgun::rvWeaponStickyRailgun ( void ) {
 }
 
 /*
 ================
-rvWeaponRailgun::Spawn
+rvWeaponStickyRailgun::Spawn
 ================
 */
-void rvWeaponRailgun::Spawn ( void ) {
+void rvWeaponStickyRailgun::Spawn ( void ) {
 	SetState ( "Raise", 0 );	
 }
 
 /*
 ================
-rvWeaponRailgun::Save
+rvWeaponStickyRailgun::Save
 ================
 */
-void rvWeaponRailgun::Save ( idSaveGame *savefile ) const {
+void rvWeaponStickyRailgun::Save ( idSaveGame *savefile ) const {
 	savefile->WriteJoint( jointBatteryView );
 }
 
 /*
 ================
-rvWeaponRailgun::Restore
+rvWeaponStickyRailgun::Restore
 ================
 */
-void rvWeaponRailgun::Restore ( idRestoreGame *savefile ) {
+void rvWeaponStickyRailgun::Restore ( idRestoreGame *savefile ) {
 	savefile->ReadJoint( jointBatteryView );
 }
 
 /*
 ================
-rvWeaponRailgun::PreSave
+rvWeaponStickyRailgun::PreSave
 ================
 */
-void rvWeaponRailgun::PreSave ( void ) {
+void rvWeaponStickyRailgun::PreSave ( void ) {
 
 	//this should shoosh the humming but not the shooting sound.
 	StopSound( SND_CHANNEL_BODY2, 0);
@@ -87,10 +87,10 @@ void rvWeaponRailgun::PreSave ( void ) {
 
 /*
 ================
-rvWeaponRailgun::PostSave
+rvWeaponStickyRailgun::PostSave
 ================
 */
-void rvWeaponRailgun::PostSave ( void ) {
+void rvWeaponStickyRailgun::PostSave ( void ) {
 
 	//restore the humming
 	PostEventMS( &EV_Railgun_RestoreHum, 10);
@@ -98,10 +98,10 @@ void rvWeaponRailgun::PostSave ( void ) {
 
 /*
 ================
-rvWeaponRailgun::Think
+rvWeaponStickyRailgun::Think
 ================
 */
-void rvWeaponRailgun::Think ( void ) {
+void rvWeaponStickyRailgun::Think ( void ) {
 
 	// Let the real weapon think first
 	rvWeapon::Think ( );
@@ -122,18 +122,18 @@ void rvWeaponRailgun::Think ( void ) {
 ===============================================================================
 */
 
-CLASS_STATES_DECLARATION ( rvWeaponRailgun )
-	STATE ( "Idle",				rvWeaponRailgun::State_Idle)
-	STATE ( "Fire",				rvWeaponRailgun::State_Fire )
-	STATE ( "Reload",			rvWeaponRailgun::State_Reload )
+CLASS_STATES_DECLARATION ( rvWeaponStickyRailgun )
+	STATE ( "Idle",				rvWeaponStickyRailgun::State_Idle)
+	STATE ( "Fire",				rvWeaponStickyRailgun::State_Fire )
+	STATE ( "Reload",			rvWeaponStickyRailgun::State_Reload )
 END_CLASS_STATES
 
 /*
 ================
-rvWeaponRailgun::State_Idle
+rvWeaponStickyRailgun::State_Idle
 ================
 */
-stateResult_t rvWeaponRailgun::State_Idle( const stateParms_t& parms ) {
+stateResult_t rvWeaponStickyRailgun::State_Idle( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -176,10 +176,10 @@ stateResult_t rvWeaponRailgun::State_Idle( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponRailgun::State_Fire
+rvWeaponStickyRailgun::State_Fire
 ================
 */
-stateResult_t rvWeaponRailgun::State_Fire ( const stateParms_t& parms ) {
+stateResult_t rvWeaponStickyRailgun::State_Fire ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -205,10 +205,10 @@ stateResult_t rvWeaponRailgun::State_Fire ( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponRailgun::State_Reload
+rvWeaponStickyRailgun::State_Reload
 ================
 */
-stateResult_t rvWeaponRailgun::State_Reload ( const stateParms_t& parms ) {
+stateResult_t rvWeaponStickyRailgun::State_Reload ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -251,20 +251,20 @@ stateResult_t rvWeaponRailgun::State_Reload ( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponRailgun::State_Reload
+rvWeaponStickyRailgun::State_Reload
 ================
 */
-void rvWeaponRailgun::Event_RestoreHum ( void ) {
+void rvWeaponStickyRailgun::Event_RestoreHum ( void ) {
 	StopSound( SND_CHANNEL_BODY2, false );
 	StartSound( "snd_idle_hum", SND_CHANNEL_BODY2, 0, false, NULL );
 }
 
 /*
 ================
-rvWeaponRailgun::ClientUnStale
+rvWeaponStickyRailgun::ClientUnStale
 ================
 */
-void rvWeaponRailgun::ClientUnstale( void ) {
+void rvWeaponStickyRailgun::ClientUnstale( void ) {
 	Event_RestoreHum();
 }
 

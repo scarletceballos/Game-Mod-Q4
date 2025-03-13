@@ -3,17 +3,19 @@
 
 #include "../Game_local.h"
 #include "../Weapon.h"
+#include "../Entity.h"
 
-class rvWeaponGrenadeLauncher : public rvWeapon {
+class rvWeaponFloorLauncher : public rvWeapon {
 public:
 
-	CLASS_PROTOTYPE( rvWeaponGrenadeLauncher );
+	CLASS_PROTOTYPE( rvWeaponFloorLauncher );
 
-	rvWeaponGrenadeLauncher ( void );
+	rvWeaponFloorLauncher ( void );
 
 	virtual void			Spawn				( void );
 	void					PreSave				( void );
 	void					PostSave			( void );
+	void					SpawnFloor			(const idVec3& position);
 
 #ifdef _XENON
 	virtual bool		AllowAutoAim			( void ) const { return false; }
@@ -28,43 +30,43 @@ private:
 	const char*			GetFireAnim() const { return (!AmmoInClip()) ? "fire_empty" : "fire"; }
 	const char*			GetIdleAnim() const { return (!AmmoInClip()) ? "idle_empty" : "idle"; }
 	
-	CLASS_STATES_PROTOTYPE ( rvWeaponGrenadeLauncher );
+	CLASS_STATES_PROTOTYPE ( rvWeaponFloorLauncher );
 };
 
-CLASS_DECLARATION( rvWeapon, rvWeaponGrenadeLauncher )
+CLASS_DECLARATION( rvWeapon, rvWeaponFloorLauncher )
 END_CLASS
 
 /*
 ================
-rvWeaponGrenadeLauncher::rvWeaponGrenadeLauncher
+rvWeaponFloorLauncher::rvWeaponFloorLauncher
 ================
 */
-rvWeaponGrenadeLauncher::rvWeaponGrenadeLauncher ( void ) {
+rvWeaponFloorLauncher::rvWeaponFloorLauncher ( void ) {
 }
 
 /*
 ================
-rvWeaponGrenadeLauncher::Spawn
+rvWeaponFloorLauncher::Spawn
 ================
 */
-void rvWeaponGrenadeLauncher::Spawn ( void ) {
+void rvWeaponFloorLauncher::Spawn ( void ) {
 	SetState ( "Raise", 0 );	
 }
 
 /*
 ================
-rvWeaponGrenadeLauncher::PreSave
+rvWeaponFloorLauncher::PreSave
 ================
 */
-void rvWeaponGrenadeLauncher::PreSave ( void ) {
+void rvWeaponFloorLauncher::PreSave ( void ) {
 }
 
 /*
 ================
-rvWeaponGrenadeLauncher::PostSave
+rvWeaponFloorLauncher::PostSave
 ================
 */
-void rvWeaponGrenadeLauncher::PostSave ( void ) {
+void rvWeaponFloorLauncher::PostSave ( void ) {
 }
 
 /*
@@ -75,18 +77,18 @@ void rvWeaponGrenadeLauncher::PostSave ( void ) {
 ===============================================================================
 */
 
-CLASS_STATES_DECLARATION ( rvWeaponGrenadeLauncher )
-	STATE ( "Idle",		rvWeaponGrenadeLauncher::State_Idle)
-	STATE ( "Fire",		rvWeaponGrenadeLauncher::State_Fire )
-	STATE ( "Reload",	rvWeaponGrenadeLauncher::State_Reload )
+CLASS_STATES_DECLARATION ( rvWeaponFloorLauncher )
+	STATE ( "Idle",		rvWeaponFloorLauncher::State_Idle)
+	STATE ( "Fire",		rvWeaponFloorLauncher::State_Fire )
+	STATE ( "Reload",	rvWeaponFloorLauncher::State_Reload )
 END_CLASS_STATES
 
 /*
 ================
-rvWeaponGrenadeLauncher::State_Idle
+rvWeaponFloorLauncher::State_Idle
 ================
 */
-stateResult_t rvWeaponGrenadeLauncher::State_Idle( const stateParms_t& parms ) {
+stateResult_t rvWeaponFloorLauncher::State_Idle( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -134,41 +136,55 @@ stateResult_t rvWeaponGrenadeLauncher::State_Idle( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponGrenadeLauncher::State_Fire
+rvWeaponFloorLauncher::SpawnFloor
 ================
 */
-stateResult_t rvWeaponGrenadeLauncher::State_Fire ( const stateParms_t& parms ) {
+void rvWeaponFloorLauncher::SpawnFloor(const idVec3& position) {
+	idDict args;
+	args.Set("classname", "floor_entity");
+	args.SetVector("origin", position);
+	args.Set("health", "100");
+	gameLocal.SpawnEntityDef(args);
+}
+
+/*
+================
+rvWeaponFloorLauncher::State_Fire
+================
+*/
+stateResult_t rvWeaponFloorLauncher::State_Fire(const stateParms_t& parms) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
-	};	
-	switch ( parms.stage ) {
-		case STAGE_INIT:
-			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
-			Attack ( false, 1, spread, 0, 1.0f );
-			PlayAnim ( ANIMCHANNEL_ALL, GetFireAnim(), 0 );	
-			return SRESULT_STAGE ( STAGE_WAIT );
-	
-		case STAGE_WAIT:		
-			if ( wsfl.attack && gameLocal.time >= nextAttackTime && AmmoInClip() && !wsfl.lowerWeapon ) {
-				SetState ( "Fire", 0 );
-				return SRESULT_DONE;
-			}
-			if ( AnimDone ( ANIMCHANNEL_ALL, 0 ) ) {
-				SetState ( "Idle", 0 );
-				return SRESULT_DONE;
-			}		
-			return SRESULT_WAIT;
+	};
+	switch (parms.stage) {
+	case STAGE_INIT: {
+		nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier(PMOD_FIRERATE));
+		idVec3 spawnPos = owner->GetEyePosition() + owner->viewAxis[0] * 100.0f; 
+		SpawnFloor(spawnPos);
+		PlayAnim(ANIMCHANNEL_ALL, GetFireAnim(), 0);
+		return SRESULT_STAGE(STAGE_WAIT);
+	}
+	case STAGE_WAIT:
+		if (wsfl.attack && gameLocal.time >= nextAttackTime && AmmoInClip() && !wsfl.lowerWeapon) {
+			SetState("Fire", 0);
+			return SRESULT_DONE;
+		}
+		if (AnimDone(ANIMCHANNEL_ALL, 0)) {
+			SetState("Idle", 0);
+			return SRESULT_DONE;
+		}
+		return SRESULT_WAIT;
 	}
 	return SRESULT_ERROR;
 }
 
 /*
 ================
-rvWeaponGrenadeLauncher::State_Reload
+rvWeaponFloorLauncher::State_Reload
 ================
 */
-stateResult_t rvWeaponGrenadeLauncher::State_Reload ( const stateParms_t& parms ) {
+stateResult_t rvWeaponFloorLauncher::State_Reload ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -199,4 +215,4 @@ stateResult_t rvWeaponGrenadeLauncher::State_Reload ( const stateParms_t& parms 
 	}
 	return SRESULT_ERROR;
 }
-			
+		

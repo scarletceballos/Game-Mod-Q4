@@ -26,13 +26,13 @@ public:
 	void					Restore			( idRestoreGame* savefile );
 };
 
-class rvWeaponLightningGun : public rvWeapon {
+class rvWeaponzapotron : public rvWeapon {
 public:
 
-	CLASS_PROTOTYPE( rvWeaponLightningGun );
+	CLASS_PROTOTYPE( rvWeaponzapotron );
 
-	rvWeaponLightningGun( void );
-	~rvWeaponLightningGun( void );
+	rvWeaponzapotron( void );
+	~rvWeaponzapotron( void );
 
 	virtual void			Spawn		( void );
 	virtual void			Think		( void );
@@ -90,27 +90,27 @@ private:
 
 	void				Event_RestoreHum	( void );
 
-	CLASS_STATES_PROTOTYPE ( rvWeaponLightningGun );
+	CLASS_STATES_PROTOTYPE ( rvWeaponzapotron );
 };
 
-CLASS_DECLARATION( rvWeapon, rvWeaponLightningGun )
-EVENT( EV_Lightninggun_RestoreHum,			rvWeaponLightningGun::Event_RestoreHum )
+CLASS_DECLARATION( rvWeapon, rvWeaponzapotron )
+EVENT( EV_Lightninggun_RestoreHum,			rvWeaponzapotron::Event_RestoreHum )
 END_CLASS
 
 /*
 ================
-rvWeaponLightningGun::rvWeaponLightningGun
+rvWeaponzapotron::rvWeaponzapotron
 ================
 */
-rvWeaponLightningGun::rvWeaponLightningGun( void ) {
+rvWeaponzapotron::rvWeaponzapotron( void ) {
 }
 
 /*
 ================
-rvWeaponLightningGun::~rvWeaponLightningGun
+rvWeaponzapotron::~rvWeaponzapotron
 ================
 */
-rvWeaponLightningGun::~rvWeaponLightningGun( void ) {
+rvWeaponzapotron::~rvWeaponzapotron( void ) {
 	int i;
 	
 	if ( trailEffectView ) {
@@ -128,10 +128,10 @@ rvWeaponLightningGun::~rvWeaponLightningGun( void ) {
 
 /*
 ================
-rvWeaponLightningGun::Spawn
+rvWeaponzapotron::Spawn
 ================
 */
-void rvWeaponLightningGun::Spawn( void ) {
+void rvWeaponzapotron::Spawn( void ) {
 	int i;
 	
 	trailEffectView = NULL;
@@ -168,10 +168,10 @@ void rvWeaponLightningGun::Spawn( void ) {
 
 /*
 ================
-rvWeaponLightningGun::Save
+rvWeaponzapotron::Save
 ================
 */
-void rvWeaponLightningGun::Save	( idSaveGame* savefile ) const {
+void rvWeaponzapotron::Save	( idSaveGame* savefile ) const {
 	int i;
 
 	// Lightning Tubes
@@ -203,10 +203,10 @@ void rvWeaponLightningGun::Save	( idSaveGame* savefile ) const {
 
 /*
 ================
-rvWeaponLightningGun::Restore
+rvWeaponzapotron::Restore
 ================
 */
-void rvWeaponLightningGun::Restore ( idRestoreGame* savefile ) {
+void rvWeaponzapotron::Restore ( idRestoreGame* savefile ) {
 	int   i;
 	int   num;
 	float f;
@@ -251,10 +251,10 @@ void rvWeaponLightningGun::Restore ( idRestoreGame* savefile ) {
 
 /*
 ================
-rvWeaponLightningGun::Think
+rvWeaponzapotron::Think
 ================
 */
-void rvWeaponLightningGun::Think ( void ) {
+void rvWeaponzapotron::Think ( void ) {
 	trace_t	  tr;
 
 	rvWeapon::Think();
@@ -333,10 +333,10 @@ void rvWeaponLightningGun::Think ( void ) {
 
 /*
 ================
-rvWeaponLightningGun::Attack
+rvWeaponzapotron::Attack
 ================
 */
-void rvWeaponLightningGun::Attack ( idEntity* ent, const idVec3& dir, float power ) {
+void rvWeaponzapotron::Attack ( idEntity* ent, const idVec3& dir, float power ) {
 	// Double check
 	if ( !ent || !ent->fl.takedamage ) {
 		return;
@@ -363,10 +363,10 @@ void rvWeaponLightningGun::Attack ( idEntity* ent, const idVec3& dir, float powe
 
 /*
 ================
-rvWeaponLightningGun::UpdateChainLightning
+rvWeaponzapotron::UpdateChainLightning
 ================
 */
-void rvWeaponLightningGun::UpdateChainLightning ( void ) {
+void rvWeaponzapotron::UpdateChainLightning ( void ) {
 	int					i;
 	rvLightningPath*	parent;
 	rvLightningPath*	path;
@@ -489,10 +489,10 @@ void rvWeaponLightningGun::UpdateChainLightning ( void ) {
 
 /*
 ================
-rvWeaponLightningGun::UpdateEffects
+rvWeaponzapotron::UpdateEffects
 ================
 */
-void rvWeaponLightningGun::UpdateEffects( const idVec3& origin ) {
+void rvWeaponzapotron::UpdateEffects( const idVec3& origin ) {
 	int					i;
 	rvLightningPath*	parent;
 	idVec3				dir;
@@ -531,10 +531,10 @@ void rvWeaponLightningGun::UpdateEffects( const idVec3& origin ) {
 
 /*
 ================
-rvWeaponLightningGun::UpdateTrailEffect
+rvWeaponzapotron::UpdateTrailEffect
 ================
 */
-void rvWeaponLightningGun::UpdateTrailEffect( rvClientEffectPtr& effect, const idVec3& start, const idVec3& end, bool view ) {
+void rvWeaponzapotron::UpdateTrailEffect( rvClientEffectPtr& effect, const idVec3& start, const idVec3& end, bool view ) {
 	idVec3 dir;
 	dir = end - start;
 	dir.Normalize();
@@ -550,10 +550,10 @@ void rvWeaponLightningGun::UpdateTrailEffect( rvClientEffectPtr& effect, const i
 
 /*
 ================
-rvWeaponLightningGun::StopChainLightning
+rvWeaponzapotron::StopChainLightning
 ================
 */
-void rvWeaponLightningGun::StopChainLightning( void ) {
+void rvWeaponzapotron::StopChainLightning( void ) {
 	int	i;
 	
 	if ( !chainLightning.Num( ) ) {
@@ -569,10 +569,10 @@ void rvWeaponLightningGun::StopChainLightning( void ) {
 
 /*
 ================
-rvWeaponLightningGun::ClientStale
+rvWeaponzapotron::ClientStale
 ================
 */
-void rvWeaponLightningGun::ClientStale( void ) {
+void rvWeaponzapotron::ClientStale( void ) {
 	rvWeapon::ClientStale( );
 
 	if ( trailEffectView ) {
@@ -586,10 +586,10 @@ void rvWeaponLightningGun::ClientStale( void ) {
 
 /*
 ================
-rvWeaponLightningGun::PreSave
+rvWeaponzapotron::PreSave
 ================
 */
-void rvWeaponLightningGun::PreSave( void ) {
+void rvWeaponzapotron::PreSave( void ) {
 
 	SetState ( "Idle", 4 );
 
@@ -623,20 +623,20 @@ void rvWeaponLightningGun::PreSave( void ) {
 
 /*
 ================
-rvWeaponLightningGun::PostSave
+rvWeaponzapotron::PostSave
 ================
 */
-void rvWeaponLightningGun::PostSave( void ) {
+void rvWeaponzapotron::PostSave( void ) {
 	//restore the humming
 	PostEventMS( &EV_Lightninggun_RestoreHum, 10 );
 }
 
 /*
 ================
-rvWeaponLightningGun::UpdateTubes
+rvWeaponzapotron::UpdateTubes
 ================
 */
-void rvWeaponLightningGun::UpdateTubes( void ) {
+void rvWeaponzapotron::UpdateTubes( void ) {
 	idAnimator* animator;
 	animator = viewModel->GetAnimator ( );
 	assert ( animator );
@@ -693,19 +693,19 @@ void rvWeaponLightningGun::UpdateTubes( void ) {
 ===============================================================================
 */
 
-CLASS_STATES_DECLARATION ( rvWeaponLightningGun )
-	STATE ( "Raise",						rvWeaponLightningGun::State_Raise )
-	STATE ( "Lower",						rvWeaponLightningGun::State_Lower )
-	STATE ( "Idle",							rvWeaponLightningGun::State_Idle)
-	STATE ( "Fire",							rvWeaponLightningGun::State_Fire )
+CLASS_STATES_DECLARATION ( rvWeaponzapotron )
+	STATE ( "Raise",						rvWeaponzapotron::State_Raise )
+	STATE ( "Lower",						rvWeaponzapotron::State_Lower )
+	STATE ( "Idle",							rvWeaponzapotron::State_Idle)
+	STATE ( "Fire",							rvWeaponzapotron::State_Fire )
 END_CLASS_STATES
 
 /*
 ================
-rvWeaponLightningGun::State_Raise
+rvWeaponzapotron::State_Raise
 ================
 */
-stateResult_t rvWeaponLightningGun::State_Raise( const stateParms_t& parms ) {
+stateResult_t rvWeaponzapotron::State_Raise( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -737,10 +737,10 @@ stateResult_t rvWeaponLightningGun::State_Raise( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponLightningGun::State_Lower
+rvWeaponzapotron::State_Lower
 ================
 */
-stateResult_t rvWeaponLightningGun::State_Lower( const stateParms_t& parms ) {
+stateResult_t rvWeaponzapotron::State_Lower( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -771,10 +771,10 @@ stateResult_t rvWeaponLightningGun::State_Lower( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponLightningGun::State_Idle
+rvWeaponzapotron::State_Idle
 ================
 */
-stateResult_t rvWeaponLightningGun::State_Idle( const stateParms_t& parms ) {
+stateResult_t rvWeaponzapotron::State_Idle( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -805,10 +805,10 @@ stateResult_t rvWeaponLightningGun::State_Idle( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponLightningGun::State_Fire
+rvWeaponzapotron::State_Fire
 ================
 */
-stateResult_t rvWeaponLightningGun::State_Fire( const stateParms_t& parms ) {
+stateResult_t rvWeaponzapotron::State_Fire( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_ATTACKLOOP,
@@ -876,10 +876,10 @@ stateResult_t rvWeaponLightningGun::State_Fire( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponLightningGun::Event_RestoreHum
+rvWeaponzapotron::Event_RestoreHum
 ================
 */
-void rvWeaponLightningGun::Event_RestoreHum ( void ) {
+void rvWeaponzapotron::Event_RestoreHum ( void ) {
 	StopSound( SND_CHANNEL_BODY3, false );
 	StartSound( "snd_idle_hum", SND_CHANNEL_BODY3, 0, false, NULL );
 }

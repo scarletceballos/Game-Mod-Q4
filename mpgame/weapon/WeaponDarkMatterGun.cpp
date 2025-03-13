@@ -5,13 +5,13 @@
 #include "../Weapon.h"
 #include "../Projectile.h"
 
-class rvWeaponDarkMatterGun : public rvWeapon {
+class rvWeaponbackbreaker : public rvWeapon {
 public:
 
-	CLASS_PROTOTYPE( rvWeaponDarkMatterGun );
+	CLASS_PROTOTYPE( rvWeaponbackbreaker );
 
-	rvWeaponDarkMatterGun ( void );
-	~rvWeaponDarkMatterGun ( void );
+	rvWeaponbackbreaker ( void );
+	~rvWeaponbackbreaker ( void );
 
 	virtual void			Spawn				( void );
 	void					Save				( idSaveGame *savefile ) const;
@@ -56,18 +56,18 @@ private:
 	stateResult_t		State_Fire		( const stateParms_t& parms );
 	stateResult_t		State_Reload	( const stateParms_t& parms );
 	
-	CLASS_STATES_PROTOTYPE ( rvWeaponDarkMatterGun );
+	CLASS_STATES_PROTOTYPE ( rvWeaponbackbreaker );
 };
 
-CLASS_DECLARATION( rvWeapon, rvWeaponDarkMatterGun )
+CLASS_DECLARATION( rvWeapon, rvWeaponbackbreaker )
 END_CLASS
 
 /*
 ================
-rvWeaponDarkMatterGun::rvWeaponDarkMatterGun
+rvWeaponbackbreaker::rvWeaponbackbreaker
 ================
 */
-rvWeaponDarkMatterGun::rvWeaponDarkMatterGun ( void ) {
+rvWeaponbackbreaker::rvWeaponbackbreaker ( void ) {
 	coreStartEffect = NULL;
 	coreEffect		= NULL;
 	ringStartTime	= -1;
@@ -76,19 +76,19 @@ rvWeaponDarkMatterGun::rvWeaponDarkMatterGun ( void ) {
 
 /*
 ================
-rvWeaponDarkMatterGun::~rvWeaponDarkMatterGun
+rvWeaponbackbreaker::~rvWeaponbackbreaker
 ================
 */
-rvWeaponDarkMatterGun::~rvWeaponDarkMatterGun ( void ) {
+rvWeaponbackbreaker::~rvWeaponbackbreaker ( void ) {
 	StopRings ( );
 }
 
 /*
 ================
-rvWeaponDarkMatterGun::Spawn
+rvWeaponbackbreaker::Spawn
 ================
 */
-void rvWeaponDarkMatterGun::Spawn ( void ) {
+void rvWeaponbackbreaker::Spawn ( void ) {
 	SetState ( "Raise", 0 );	
 	
 	InitRing ( RING_OUTER, "outer" );
@@ -104,10 +104,10 @@ void rvWeaponDarkMatterGun::Spawn ( void ) {
 
 /*
 ================
-rvWeaponDarkMatterGun::Save
+rvWeaponbackbreaker::Save
 ================
 */
-void rvWeaponDarkMatterGun::Save ( idSaveGame *savefile ) const {
+void rvWeaponbackbreaker::Save ( idSaveGame *savefile ) const {
 	for ( int i = 0; i < RING_MAX; i++ ) {
 		savefile->WriteAngles ( rings[ i ].angularVelocity );
 		savefile->WriteJoint ( rings[ i ].joint );
@@ -122,10 +122,10 @@ void rvWeaponDarkMatterGun::Save ( idSaveGame *savefile ) const {
 
 /*
 ================
-rvWeaponDarkMatterGun::Restore
+rvWeaponbackbreaker::Restore
 ================
 */
-void rvWeaponDarkMatterGun::Restore ( idRestoreGame *savefile ) {
+void rvWeaponbackbreaker::Restore ( idRestoreGame *savefile ) {
 	for ( int i = 0; i < RING_MAX; i++ ) {
 		savefile->ReadAngles ( rings[ i ].angularVelocity );
 		savefile->ReadJoint ( rings[ i ].joint );
@@ -140,10 +140,10 @@ void rvWeaponDarkMatterGun::Restore ( idRestoreGame *savefile ) {
 
 /*
 ================
-rvWeaponDarkMatterGun::PreSave
+rvWeaponbackbreaker::PreSave
 ================
 */
-void rvWeaponDarkMatterGun::PreSave ( void ) {
+void rvWeaponbackbreaker::PreSave ( void ) {
 
 	//disable sounds
 	StopSound( SND_CHANNEL_ANY, false);
@@ -152,10 +152,10 @@ void rvWeaponDarkMatterGun::PreSave ( void ) {
 
 /*
 ================
-rvWeaponDarkMatterGun::PostSave
+rvWeaponbackbreaker::PostSave
 ================
 */
-void rvWeaponDarkMatterGun::PostSave ( void ) {
+void rvWeaponbackbreaker::PostSave ( void ) {
 
 	//start the ring sounds
 	StartSound ( "snd_rings", SND_CHANNEL_VOICE, 0, false, NULL );		
@@ -164,20 +164,20 @@ void rvWeaponDarkMatterGun::PostSave ( void ) {
 
 /*
 ================
-rvWeaponDarkMatterGun::InitRing
+rvWeaponbackbreaker::InitRing
 ================
 */
-void rvWeaponDarkMatterGun::InitRing ( darkMatterRing_t ring, const char* name ) {
+void rvWeaponbackbreaker::InitRing ( darkMatterRing_t ring, const char* name ) {
 	rings[ring].angularVelocity = spawnArgs.GetAngles ( va("ring_%s_velocity", name ) );
 	rings[ring].joint = viewModel->GetAnimator()->GetJointHandle ( spawnArgs.GetString ( va("ring_%s_joint", name ) ) );
 }
 
 /*
 ================
-rvWeaponDarkMatterGun::StartRings
+rvWeaponbackbreaker::StartRings
 ================
 */
-void rvWeaponDarkMatterGun::StartRings ( bool chargeUp ) {
+void rvWeaponbackbreaker::StartRings ( bool chargeUp ) {
 	int i;
 	
 	if ( ringStartTime == -1 ) {	
@@ -200,10 +200,10 @@ void rvWeaponDarkMatterGun::StartRings ( bool chargeUp ) {
 
 /*
 ================
-rvWeaponDarkMatterGun::StopRings
+rvWeaponbackbreaker::StopRings
 ================
 */
-void rvWeaponDarkMatterGun::StopRings ( void ) {
+void rvWeaponbackbreaker::StopRings ( void ) {
 	int i;
 	
 	if ( !viewModel ) {
@@ -237,18 +237,18 @@ void rvWeaponDarkMatterGun::StopRings ( void ) {
 ===============================================================================
 */
 
-CLASS_STATES_DECLARATION ( rvWeaponDarkMatterGun )
-	STATE ( "Idle",				rvWeaponDarkMatterGun::State_Idle)
-	STATE ( "Fire",				rvWeaponDarkMatterGun::State_Fire )
-	STATE ( "Reload",			rvWeaponDarkMatterGun::State_Reload )
+CLASS_STATES_DECLARATION ( rvWeaponbackbreaker )
+	STATE ( "Idle",				rvWeaponbackbreaker::State_Idle)
+	STATE ( "Fire",				rvWeaponbackbreaker::State_Fire )
+	STATE ( "Reload",			rvWeaponbackbreaker::State_Reload )
 END_CLASS_STATES
 
 /*
 ================
-rvWeaponDarkMatterGun::State_Idle
+rvWeaponbackbreaker::State_Idle
 ================
 */
-stateResult_t rvWeaponDarkMatterGun::State_Idle( const stateParms_t& parms ) {
+stateResult_t rvWeaponbackbreaker::State_Idle( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -301,10 +301,10 @@ stateResult_t rvWeaponDarkMatterGun::State_Idle( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponDarkMatterGun::State_Fire
+rvWeaponbackbreaker::State_Fire
 ================
 */
-stateResult_t rvWeaponDarkMatterGun::State_Fire ( const stateParms_t& parms ) {
+stateResult_t rvWeaponbackbreaker::State_Fire ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -330,10 +330,10 @@ stateResult_t rvWeaponDarkMatterGun::State_Fire ( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponDarkMatterGun::State_Reload
+rvWeaponbackbreaker::State_Reload
 ================
 */
-stateResult_t rvWeaponDarkMatterGun::State_Reload ( const stateParms_t& parms ) {
+stateResult_t rvWeaponbackbreaker::State_Reload ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,

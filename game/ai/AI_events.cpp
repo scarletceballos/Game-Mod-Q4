@@ -362,6 +362,7 @@ void idAI::Event_LockEnemyOrigin ( void ) {
 	enemy.fl.lockOrigin = true;
 }
 
+
 /*
 =====================
 idAI::Event_StopThinking
@@ -1099,7 +1100,18 @@ idAI::Event_FindEnemy
 ================
 */
 void idAI::Event_FindEnemy( float distSqr )	{
-		idThread::ReturnEntity ( FindEnemy( false, 1, distSqr ));
+	idEntity* enemy = FindEnemy(false, 1, distSqr);
+	if (!enemy) {
+		// Check for wall or floor entities
+		idEntity* ent;
+		for (ent = gameLocal.spawnedEntities.Next(); ent != NULL; ent = ent->spawnNode.Next()) {
+			if (ent->IsType(idEntity::GetClassType()) && (ent->GetName() == "wall_entity" || ent->GetName() == "floor_entity")) {
+				enemy = ent;
+				break;
+			}
+		}
+	}
+	idThread::ReturnEntity(enemy);	
 }
 
 /*

@@ -19,7 +19,7 @@
 class riBuyingManager
 {
 private:
-	const idDeclEntityDef*	_buyingGameBalanceConstants;
+	const idDeclEntityDef* _buyingGameBalanceConstants;
 	int						opponentKillCashAward;	// latch
 	int						opponentKillFragCount;
 
@@ -27,10 +27,17 @@ public:
 	riBuyingManager();
 	~riBuyingManager();
 
-	int GetIntValueForKey( const char* keyName, int defaultValue );
-	int GetOpponentKillCashAward( void );
+	void Init();
 
-	void Reset( void ) { opponentKillFragCount = -1; }
+	int GetIntValueForKey(const char* keyName, int defaultValue);
+	int GetOpponentKillCashAward(void);
+
+	void Reset(void) { opponentKillFragCount = -1; }
+	bool canBuyWeapon(const idDict& inventory, const char* weaponName);
+	void BuyWeapon(idPlayer* player, const char* weaponName);
+
+	int GetWeaponReq(const char* weaponName);
+
 };
 
 

@@ -1280,6 +1280,18 @@ void Cmd_Remove_f( const idCmdArgs &args ) {
 
 	delete ent;
 }
+/*
+==================
+Cmd_ShowCollectables_f
+==================
+*/
+void Cmd_ShowCollectables_f(const idCmdArgs& args) {
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	if (player) {
+		gameLocal.Printf("Current collectables: wood=%d, stone=%d, metal=%d, silverOre=%d, sleekMechParts=%d\n",
+			player->inventory.wood, player->inventory.stone, player->inventory.metal, player->inventory.silverOre, player->inventory.sleekMechParts);
+	}
+}
 
 /*
 ==================
@@ -3092,6 +3104,8 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand( "flashlight",			Cmd_Flashlight_f,			CMD_FL_GAME|CMD_FL_CHEAT,	"toggle actor's flashlight", idGameLocal::ArgCompletion_AIName );
 	
 	cmdSystem->AddCommand( "shuffleTeams",			Cmd_ShuffleTeams_f,			CMD_FL_GAME,				"shuffle teams" );
+	cmdSystem->AddCommand("showCollectables", Cmd_ShowCollectables_f, CMD_FL_GAME, "Displays the number of collectables the player has");
+
 // RAVEN BEGIN
 // bdube: not using id effect system
 //	cmdSystem->AddCommand( "testFx",				Cmd_TestFx_f,				CMD_FL_GAME|CMD_FL_CHEAT,	"tests an FX system", idCmdSystem::ArgCompletion_Decl<DECL_FX> );
@@ -3231,6 +3245,10 @@ void idGameLocal::InitConsoleCommands( void ) {
 // squirrel: Mode-agnostic buymenus
 	cmdSystem->AddCommand( "buyMenu",				Cmd_ToggleBuyMenu_f,		CMD_FL_GAME,				"Toggle buy menu (if in a buy zone and the game type supports it)" );
 	cmdSystem->AddCommand( "buy",					Cmd_BuyItem_f,				CMD_FL_GAME,				"Buy an item (if in a buy zone and the game type supports it)" );
+
+	// Copy for buyzone
+	//cmdSystem->AddCommand("buyMenu", Cmd_ToggleBuyMenu_f, CMD_FL_GAME, "Toggle buy menu (if in a buy zone and the game type supports it)");
+	//cmdSystem->AddCommand("buy", Cmd_BuyItem_f, CMD_FL_GAME, "Buy an item (if in a buy zone and the game type supports it)");
 // RITUAL END
 
 }

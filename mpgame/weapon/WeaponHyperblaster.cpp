@@ -7,12 +7,12 @@
 const int HYPERBLASTER_SPARM_BATTERY = 6;
 const int HYPERBLASTER_SPIN_SPEED	 = 300;
 
-class rvWeaponHyperblaster : public rvWeapon {
+class rvWeaponfobr : public rvWeapon {
 public:
 
-	CLASS_PROTOTYPE( rvWeaponHyperblaster );
+	CLASS_PROTOTYPE( rvWeaponfobr );
 
-	rvWeaponHyperblaster ( void );
+	rvWeaponfobr ( void );
 
 	virtual void			Spawn				( void );
 	void					Save				( idSaveGame *savefile ) const;
@@ -34,26 +34,26 @@ private:
 	stateResult_t		State_Fire		( const stateParms_t& parms );
 	stateResult_t		State_Reload	( const stateParms_t& parms );
 	
-	CLASS_STATES_PROTOTYPE ( rvWeaponHyperblaster );
+	CLASS_STATES_PROTOTYPE ( rvWeaponfobr );
 };
 
-CLASS_DECLARATION( rvWeapon, rvWeaponHyperblaster )
+CLASS_DECLARATION( rvWeapon, rvWeaponfobr )
 END_CLASS
 
 /*
 ================
-rvWeaponHyperblaster::rvWeaponHyperblaster
+rvWeaponfobr::rvWeaponfobr
 ================
 */
-rvWeaponHyperblaster::rvWeaponHyperblaster ( void ) {
+rvWeaponfobr::rvWeaponfobr ( void ) {
 }
 
 /*
 ================
-rvWeaponHyperblaster::Spawn
+rvWeaponfobr::Spawn
 ================
 */
-void rvWeaponHyperblaster::Spawn ( void ) {
+void rvWeaponfobr::Spawn ( void ) {
 	jointBatteryView = viewAnimator->GetJointHandle ( spawnArgs.GetString ( "joint_view_battery" ) );
 	spinning		 = false;
 	
@@ -62,30 +62,30 @@ void rvWeaponHyperblaster::Spawn ( void ) {
 
 /*
 ================
-rvWeaponHyperblaster::Save
+rvWeaponfobr::Save
 ================
 */
-void rvWeaponHyperblaster::Save ( idSaveGame *savefile ) const {
+void rvWeaponfobr::Save ( idSaveGame *savefile ) const {
 	savefile->WriteJoint ( jointBatteryView );
 	savefile->WriteBool ( spinning );
 }
 
 /*
 ================
-rvWeaponHyperblaster::Restore
+rvWeaponfobr::Restore
 ================
 */
-void rvWeaponHyperblaster::Restore ( idRestoreGame *savefile ) {
+void rvWeaponfobr::Restore ( idRestoreGame *savefile ) {
 	savefile->ReadJoint ( jointBatteryView );
 	savefile->ReadBool ( spinning );
 }
 
 /*
 ================
-rvWeaponHyperBlaster::PreSave
+rvWeaponfobr::PreSave
 ================
 */
-void rvWeaponHyperblaster::PreSave ( void ) {
+void rvWeaponfobr::PreSave ( void ) {
 
 	SetState ( "Idle", 4 );
 
@@ -98,18 +98,18 @@ void rvWeaponHyperblaster::PreSave ( void ) {
 
 /*
 ================
-rvWeaponHyperBlaster::PostSave
+rvWeaponfobr::PostSave
 ================
 */
-void rvWeaponHyperblaster::PostSave ( void ) {
+void rvWeaponfobr::PostSave ( void ) {
 }
 
 /*
 ================
-rvWeaponHyperblaster::SpinUp
+rvWeaponfobr::SpinUp
 ================
 */
-void rvWeaponHyperblaster::SpinUp ( void ) {
+void rvWeaponfobr::SpinUp ( void ) {
 	if ( spinning ) {
 		return;
 	}
@@ -125,10 +125,10 @@ void rvWeaponHyperblaster::SpinUp ( void ) {
 
 /*
 ================
-rvWeaponHyperblaster::SpinDown
+rvWeaponfobr::SpinDown
 ================
 */
-void rvWeaponHyperblaster::SpinDown	( void ) {
+void rvWeaponfobr::SpinDown	( void ) {
 	if ( !spinning ) {
 		return;
 	}
@@ -151,18 +151,18 @@ void rvWeaponHyperblaster::SpinDown	( void ) {
 ===============================================================================
 */
 
-CLASS_STATES_DECLARATION ( rvWeaponHyperblaster )
-	STATE ( "Idle",				rvWeaponHyperblaster::State_Idle)
-	STATE ( "Fire",				rvWeaponHyperblaster::State_Fire )
-	STATE ( "Reload",			rvWeaponHyperblaster::State_Reload )
+CLASS_STATES_DECLARATION ( rvWeaponfobr )
+	STATE ( "Idle",				rvWeaponfobr::State_Idle)
+	STATE ( "Fire",				rvWeaponfobr::State_Fire )
+	STATE ( "Reload",			rvWeaponfobr::State_Reload )
 END_CLASS_STATES
 
 /*
 ================
-rvWeaponHyperblaster::State_Idle
+rvWeaponfobr::State_Idle
 ================
 */
-stateResult_t rvWeaponHyperblaster::State_Idle( const stateParms_t& parms ) {
+stateResult_t rvWeaponfobr::State_Idle( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -217,10 +217,10 @@ stateResult_t rvWeaponHyperblaster::State_Idle( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponHyperblaster::State_Fire
+rvWeaponfobr::State_Fire
 ================
 */
-stateResult_t rvWeaponHyperblaster::State_Fire ( const stateParms_t& parms ) {
+stateResult_t rvWeaponfobr::State_Fire ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -254,10 +254,10 @@ stateResult_t rvWeaponHyperblaster::State_Fire ( const stateParms_t& parms ) {
 
 /*
 ================
-rvWeaponHyperblaster::State_Reload
+rvWeaponfobr::State_Reload
 ================
 */
-stateResult_t rvWeaponHyperblaster::State_Reload ( const stateParms_t& parms ) {
+stateResult_t rvWeaponfobr::State_Reload ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,

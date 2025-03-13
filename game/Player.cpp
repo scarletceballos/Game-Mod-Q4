@@ -17,6 +17,9 @@
 #include "ai/AAS_tactical.h"
 #include "Healing_Station.h"
 #include "ai/AI_Medic.h"
+#include "TriggerBuyMenu.h"
+#include "mp/Buying.h"
+#include "spawner.h"
 
 // RAVEN BEGIN
 // nrausch: support for turning the weapon change ui on and off
@@ -109,6 +112,9 @@ const idEventDef EV_Player_SetExtraProjPassEntity( "setExtraProjPassEntity", "E"
 const idEventDef EV_Player_SetArmor( "setArmor", "f" );
 const idEventDef EV_Player_DamageEffect( "damageEffect", "sE" );
 const idEventDef EV_Player_AllowFallDamage( "allowFallDamage", "d" );
+const idEventDef EV_Player_BuyWeapon("buyWeapon", "s");
+const idEventDef EV_ShowBuymenu("showBuymenu", "e");
+const idEventDef EV_HideBuymenu("hideBuymenu", "e");
 
 // mekberg: allow enabling/disabling of objectives
 const idEventDef EV_Player_EnableObjectives( "enableObjectives" );
@@ -142,6 +148,7 @@ CLASS_DECLARATION( idActor, idPlayer )
 	EVENT( EV_Player_GetAmmoData,			idPlayer::Event_GetAmmoData )
 	EVENT( EV_Player_RefillAmmo,			idPlayer::Event_RefillAmmo )
 	EVENT( EV_Player_AllowFallDamage,		idPlayer::Event_AllowFallDamage )
+	EVENT( EV_Player_BuyWeapon,				idPlayer::Event_BuyWeapon )
 
 
 // mekberg: allow enabling/disabling of objectives
@@ -206,6 +213,11 @@ void idInventory::Clear( void ) {
 	armor				= 0;
 	maxarmor			= 0;
 	secretAreasDiscovered = 0;
+	wood = 0;
+	silverOre = 0;
+	stone = 0;
+	metal = 0;
+	sleekMechParts = 0;
 
 	memset( ammo, 0, sizeof( ammo ) );
 
@@ -245,6 +257,7 @@ void idInventory::GivePowerUp( idPlayer *player, int powerup, int msec ) {
 	powerups |= 1 << powerup;
 	powerupEndTime[ powerup ] = msec == -1 ? -1 : (gameLocal.time + msec);
 }
+
 
 /*
 ==============
@@ -388,6 +401,9 @@ void idInventory::RestoreInventory( idPlayer *owner, const idDict &dict ) {
 		lti.triggerName = dict.GetString( itemname );
 		levelTriggers.Append( lti );
 	}
+
+	Give(owner, dict, "weapon_floorlauncher", "1", NULL, true, false, false);
+	Give(owner, dict, "weapon_wallLauncher", "1", NULL, true, false, false);
 
 }
 
@@ -831,161 +847,223 @@ idInventory::Give
 If checkOnly is true, check only for possibility of adding to inventory, don't actually add
 ==============
 */
-bool idInventory::Give( idPlayer *owner, const idDict &spawnArgs, const char *statname, const char *value, int *idealWeapon, bool updateHud, bool dropped, bool checkOnly ) {
+bool idInventory::Give(idPlayer* owner, const idDict& spawnArgs, const char* statname, const char* value, int* idealWeapon, bool updateHud, bool dropped, bool checkOnly) {
 	int						i;
-	const char				*pos;
-	const char				*end;
+	const char* pos;
+	const char* end;
 	int						len;
 	idStr					weaponString;
 	int						max;
 	int						amount;
 
-	if ( !idStr::Icmpn( statname, "ammo_", 5 ) ) {
-		i = AmmoIndexForAmmoClass( statname );
-		max = MaxAmmoForAmmoClass( owner, statname );
-		amount = atoi( value );
+	if (!idStr::Icmpn(statname, "ammo_", 5)) {
+		i = AmmoIndexForAmmoClass(statname);
+		max = MaxAmmoForAmmoClass(owner, statname);
+		amount = atoi(value);
 
-// RAVEN BEGIN
-// mekberg: check max ammo vs clipsize when picking up ammo
-		if ( !gameLocal.IsMultiplayer ( ) ) {
-			return DetermineAmmoAvailability ( owner, statname, i, amount, max );	
-		} else if ( ammo[ i ] >= max ) {
+		// RAVEN BEGIN
+		// mekberg: check max ammo vs clipsize when picking up ammo
+		if (!gameLocal.IsMultiplayer()) {
+			return DetermineAmmoAvailability(owner, statname, i, amount, max);
+		}
+		else if (ammo[i] >= max) {
 			return false;
 		}
 
-		if ( amount && !checkOnly ) {			
-			ammo[ i ] += amount;
-			if ( ( max > 0 ) && ( ammo[ i ] > max ) ) {
-				ammo[ i ] = max;
+		if (amount && !checkOnly) {
+			ammo[i] += amount;
+			if ((max > 0) && (ammo[i] > max)) {
+				ammo[i] = max;
 			}
 		}
-// RAVEN END
-	} else if ( !idStr::Icmpn( statname, "start_ammo_", 11 ) ) {
+		// RAVEN END
+	}
+	else if (!idStr::Icmpn(statname, "start_ammo_", 11)) {
 		// starting ammo gives only if current ammo is below it
-		idStr ammoname( statname );
-		ammoname.StripLeading( "start_" );
-		i = AmmoIndexForAmmoClass( ammoname.c_str() );
-		max = MaxAmmoForAmmoClass( owner, ammoname.c_str() );
-		amount = atoi( value );
+		idStr ammoname(statname);
+		ammoname.StripLeading("start_");
+		i = AmmoIndexForAmmoClass(ammoname.c_str());
+		max = MaxAmmoForAmmoClass(owner, ammoname.c_str());
+		amount = atoi(value);
 
-// RAVEN BEGIN
-// mekberg: check max ammo vs clipsize when picking up ammo
-		if ( !gameLocal.IsMultiplayer ( ) ) {
-			return DetermineAmmoAvailability ( owner, statname, i, amount, max );
-		} else if ( amount ) {	
-			if ( ammo[ i ] >= amount ) {
+		// RAVEN BEGIN
+		// mekberg: check max ammo vs clipsize when picking up ammo
+		if (!gameLocal.IsMultiplayer()) {
+			return DetermineAmmoAvailability(owner, statname, i, amount, max);
+		}
+		else if (amount) {
+			if (ammo[i] >= amount) {
 				amount = 1;
-			} else {
-				amount = amount - ammo[ i ];
+			}
+			else {
+				amount = amount - ammo[i];
 			}
 		}
 
-		if ( amount && !checkOnly ) {			
-			ammo[ i ] += amount;
-			if ( ( max > 0 ) && ( ammo[ i ] > max ) ) {
-				ammo[ i ] = max;
+		if (amount && !checkOnly) {
+			ammo[i] += amount;
+			if ((max > 0) && (ammo[i] > max)) {
+				ammo[i] = max;
 			}
 		}
-// RAVEN END
-	} else if ( !idStr::Icmp( statname, "armor" ) ) {
-		if ( armor >= maxarmor * 2 ) {
+		// RAVEN END
+	}
+	else if (!idStr::Icmp(statname, "armor")) {
+		if (armor >= maxarmor * 2) {
 			return false;
 		}
-	} else 	if ( !idStr::Icmp( statname, "health" ) ) {
-		if ( owner->health >= maxHealth ) {
+	}
+	else 	if (!idStr::Icmp(statname, "health")) {
+		if (owner->health >= maxHealth) {
 			return false;
 		}
-	} else if ( idStr::FindText( statname, "inclip_" ) == 0 ) {
-		i = owner->SlotForWeapon ( statname + 7 );
-		if ( i != -1 && !checkOnly ) {
+	}
+	else if (idStr::FindText(statname, "inclip_") == 0) {
+		i = owner->SlotForWeapon(statname + 7);
+		if (i != -1 && !checkOnly) {
 			// set, don't add. not going over the clip size limit.
-			clip[ i ] = atoi( value );
+			clip[i] = atoi(value);
 		}
-	} else if ( !idStr::Icmp( statname, "quad" ) && !checkOnly ) {
-		GivePowerUp( owner, POWERUP_QUADDAMAGE, SEC2MS( atof( value ) ) );
-	} else if ( !idStr::Icmp( statname, "regen" ) && !checkOnly ) {
-		GivePowerUp( owner, POWERUP_REGENERATION, SEC2MS( atof( value ) ) );
-	} else if ( !idStr::Icmp( statname, "haste" ) && !checkOnly ) {
-		GivePowerUp( owner, POWERUP_HASTE, SEC2MS( atof( value ) ) );
-	} else if( !idStr::Icmp( statname, "ammoregen" ) && !checkOnly ) {
-		GivePowerUp( owner, POWERUP_AMMOREGEN, -1 );
-	} else if ( !idStr::Icmp( statname, "weapon" ) ) {
-		bool tookWeapon = false;
- 		for( pos = value; pos != NULL; pos = end ) {
-			end = strchr( pos, ',' );
-			if ( end ) {
-				len = end - pos;
-				end++;
-			} else {
-				len = strlen( pos );
+		else if (!idStr::Icmp(statname, "wood")) {
+			if (!checkOnly) {
+				wood += atoi(value);
+				owner->UpdateCollectableGUI();
 			}
-
-			idStr weaponName( pos, 0, len );
-
-			// find the number of the matching weapon names
-			i = owner->SlotForWeapon ( weaponName );
-// RAVEN BEGIN
-// mekberg: check for not found weapons
-			if ( i == -1 ) {
-				gameLocal.Warning( "Unknown weapon '%s'", weaponName.c_str() );
-				return false;
+		}
+		else if (!idStr::Icmp(statname, "stone")) {
+			if (!checkOnly) {
+				stone += atoi(value);
+				owner->UpdateCollectableGUI();
 			}
-// RAVEN END
+		}
+		else if (!idStr::Icmp(statname, "metal")) {
+			if (!checkOnly) {
+				metal += atoi(value);
+				owner->UpdateCollectableGUI();
+			}
+		}
+		else if (!idStr::Icmp(statname, "silverOre")) {
+			if (!checkOnly) {
+				silverOre += atoi(value);
+				owner->UpdateCollectableGUI();
+			}
+		}
+		else if (!idStr::Icmp(statname, "sleekMechanicalParts")) {
+			if (!checkOnly) {
+				sleekMechParts += atoi(value);
+				owner->UpdateCollectableGUI();
+			}
+		}
+		else if (!idStr::Icmp(statname, "quad") && !checkOnly) {
+			GivePowerUp(owner, POWERUP_QUADDAMAGE, SEC2MS(atof(value)));
+		}
+		else if (!idStr::Icmp(statname, "regen") && !checkOnly) {
+			GivePowerUp(owner, POWERUP_REGENERATION, SEC2MS(atof(value)));
+		}
+		else if (!idStr::Icmp(statname, "haste") && !checkOnly) {
+			GivePowerUp(owner, POWERUP_HASTE, SEC2MS(atof(value)));
+		}
+		else if (!idStr::Icmp(statname, "ammoregen") && !checkOnly) {
+			GivePowerUp(owner, POWERUP_AMMOREGEN, -1);
+		}
+		else if (!idStr::Icmp(statname, "weapon")) {
+			bool tookWeapon = false;
+			for (pos = value; pos != NULL; pos = end) {
+				end = strchr(pos, ',');
+				if (end) {
+					len = end - pos;
+					end++;
+				}
+				else {
+					len = strlen(pos);
+				}
 
- 			if ( gameLocal.isMultiplayer 
-				&& ( weapons & ( 1 << i ) ) ) {
-				//already have this weapon
-				if ( !dropped ) {
-					//a placed weapon item
-					if ( gameLocal.IsWeaponsStayOn() ) {
-						//don't pick up weapons at all if you already have them...
+				idStr weaponName(pos, 0, len);
+
+				// find the number of the matching weapon names
+				i = owner->SlotForWeapon(weaponName);
+				// RAVEN BEGIN
+				// mekberg: check for not found weapons
+				if (i == -1) {
+					gameLocal.Warning("Unknown weapon '%s'", weaponName.c_str());
+					return false;
+				}
+				// RAVEN END
+
+				if (gameLocal.isMultiplayer
+					&& (weapons & (1 << i))) {
+					//already have this weapon
+					if (!dropped) {
+						//a placed weapon item
+						if (gameLocal.IsWeaponsStayOn()) {
+							//don't pick up weapons at all if you already have them...
+							continue;
+						}
+					}
+					// don't pickup "no ammo" weapon types twice
+					// not for singleplayer.. there is only one case in the game where you can get a no ammo
+					// weapon when you might already have it, in that case it is more consistent to pick it up
+					// cache the media for this weapon
+					const idDict* dict;
+					dict = &owner->GetWeaponDef(i)->dict;
+					if (dict && !dict->GetInt("ammoRequired")) {
 						continue;
 					}
 				}
-				// don't pickup "no ammo" weapon types twice
- 				// not for singleplayer.. there is only one case in the game where you can get a no ammo
- 				// weapon when you might already have it, in that case it is more consistent to pick it up
-				// cache the media for this weapon
-				const idDict* dict;
-				dict = &owner->GetWeaponDef ( i )->dict;
-				if ( dict && !dict->GetInt( "ammoRequired" ) ) {
-					continue;
+
+				if (!gameLocal.world->spawnArgs.GetBool("no_Weapons") || (weaponName == "weapon_fists")) {
+					if ((weapons & (1 << i)) == 0 || gameLocal.isMultiplayer) {
+						if ((owner->GetUserInfo()->GetBool("ui_autoSwitch")
+							|| (gameLocal.isMultiplayer && gameLocal.mpGame.IsBuyingAllowedInTheCurrentGameMode()))
+							&& idealWeapon && !checkOnly)
+						{
+							// client prediction should not get here
+							assert(!gameLocal.isClient);
+							*idealWeapon = i;
+						}
+						if (owner->hud && updateHud && lastGiveTime + 1000 < gameLocal.time && !checkOnly) {
+							owner->hud->SetStateInt("newWeapon", i);
+							owner->hud->HandleNamedEvent("newWeapon");
+							lastGiveTime = gameLocal.time;
+						}
+						if (!checkOnly) {
+							weapons |= (1 << i);
+						}
+						tookWeapon = true;
+					}
 				}
 			}
-
- 			if ( !gameLocal.world->spawnArgs.GetBool( "no_Weapons" ) || ( weaponName == "weapon_fists" ) ) {
- 				if ( ( weapons & ( 1 << i ) ) == 0 || gameLocal.isMultiplayer ) {
-					if ( ( owner->GetUserInfo()->GetBool( "ui_autoSwitch" ) 
-						|| ( gameLocal.isMultiplayer && gameLocal.mpGame.IsBuyingAllowedInTheCurrentGameMode() ) )
-						&& idealWeapon && !checkOnly )
-					{
-						// client prediction should not get here
-						assert( !gameLocal.isClient );
- 						*idealWeapon = i;
- 					} 
- 					if ( owner->hud && updateHud && lastGiveTime + 1000 < gameLocal.time && !checkOnly ) {
- 						owner->hud->SetStateInt( "newWeapon", i );
- 						owner->hud->HandleNamedEvent( "newWeapon" );
- 						lastGiveTime = gameLocal.time;
- 					}
-					if( !checkOnly ) {
- 						weapons |= ( 1 << i );
-					}
- 					tookWeapon = true;
- 				}
-  			}
+			return tookWeapon;
 		}
-		return tookWeapon;
-	} else if ( !idStr::Icmp( statname, "item" ) || !idStr::Icmp( statname, "icon" ) || !idStr::Icmp( statname, "name" ) ) {
-		// ignore these as they're handled elsewhere
-		return false;
-	} else {
-		// unknown item
-		gameLocal.Warning( "Unknown stat '%s' added to player's inventory", statname );
-		return false;
+		else if (!idStr::Icmp(statname, "item") || !idStr::Icmp(statname, "icon") || !idStr::Icmp(statname, "name")) {
+			// ignore these as they're handled elsewhere
+			return false;
+		}
+		else {
+			// unknown item
+			gameLocal.Warning("Unknown stat '%s' added to player's inventory", statname);
+			return false;
+		}
 	}
 
-	return true;
+		return true;
+	}
+
+/*
+===============
+idInventoy::UpdateCollectables
+===============
+*/
+void idPlayer::UpdateCollectables(int amount) {
+		collectables += amount;
+}
+/*
+===============
+idInventoy::GetCollectables
+===============
+*/
+int idPlayer::GetCollectables(void) const {
+		return collectables;
 }
 
 /*
@@ -1101,6 +1179,8 @@ idPlayer::idPlayer() {
 
 	lastHitTime				= 0;
 	lastSavingThrowTime		= 0;
+	buyMenuGui = uiManager->FindGui("guis/buymenu.gui", true, false, true);
+	buyingManager.Init();
 
 	weapon					= NULL;
 
@@ -1358,10 +1438,75 @@ void idPlayer::SetShowHud( bool showHud )	{
 
 /*
 ==============
+idPlayer::ShowBuyMenu
+==============
+*/
+void idPlayer::ShowBuymenu(void) {
+	if (buyMenuGui) {
+		buyMenuGui->Activate(true, gameLocal.time);
+	}
+}
+
+/*
+==============
+idPlayer::UpdateCollectableGUI
+==============
+*/
+
+void idPlayer::UpdateCollectableGUI() {
+	if (hud) {
+		hud->SetStateInt("wood_count", inventory.wood);
+		hud->SetStateInt("stone_count", inventory.stone);
+		hud->SetStateInt("metal_count", inventory.metal);
+		hud->SetStateInt("silverore_count", inventory.silverOre);
+		hud->SetStateInt("sleekMechParts_count", inventory.sleekMechParts);
+		hud->StateChanged(gameLocal.time);
+	}
+}
+
+/*
+==============
+idPlayer::HideBuymenu
+==============
+*/
+void idPlayer::HideBuymenu(void) {
+	if (buyMenuGui) {
+		buyMenuGui->Activate(false, gameLocal.time);
+	}
+}
+
+/*
+==============
+idPlayer::BuyWeapon
+==============
+*/
+
+bool idPlayer::CanBuyWeapon(const char* weaponName) {
+	int cost = GetWeaponCost(weaponName); // Implement this method to return the cost of the weapon
+	return collectables >= cost;
+}
+
+/*
+==============
+idPlayer::BuyWeapon
+==============
+*/
+// do a check if player has enough collectables to buy weapons
+void idPlayer::BuyWeapon(const char* weaponName) {
+	if (CanBuyWeapon(weaponName)) {
+		int cost = GetWeaponCost(weaponName);
+		collectables -= cost;
+		GiveWeapon(weaponName); // Implement this method to give the weapon to the player
+	}
+}
+
+
+/*
+==============
 idPlayer::SetShowHud
 ==============
 */
-bool idPlayer::GetShowHud( void )	{
+bool idPlayer::GetShowHud( void ) {
 	return !disableHud;
 }
 
@@ -1812,6 +1957,11 @@ void idPlayer::Spawn( void ) {
 	idStr		temp;
 	idBounds	bounds;
 
+	inventory.wood = 1;
+	inventory.stone = 1;
+	Give("weapon_walllauncher", "1");
+	Give("weapon_floorlauncher", "1");
+
 	if ( entityNumber >= MAX_CLIENTS ) {
 		gameLocal.Error( "entityNum > MAX_CLIENTS for player.  Player may only be spawned with a client." );
 	}
@@ -2058,6 +2208,9 @@ void idPlayer::Spawn( void ) {
 //RITUAL END
 
 	itemCosts = static_cast< const idDeclEntityDef * >( declManager->FindType( DECL_ENTITYDEF, "ItemCostConstants", false ) );
+
+	inventory.Give(this, spawnArgs, "weapon_floorlauncher", "1", NULL, true, false, false);
+	inventory.Give(this, spawnArgs, "weapon_wallLauncher", "1", NULL, true, false, false);
 }
 
 /*
@@ -5083,6 +5236,23 @@ bool idPlayer::GiveWeaponMods( int weapon, int mods ) {
 	currentWeapon = -1;
 
 	return true;
+}
+
+/*
+===============
+idPlayer::GiveWeapon
+===============
+*/
+void idPlayer::GiveWeapon(const char* weaponName) {
+	int weaponIndex = SlotForWeapon(weaponName);
+	if (weaponIndex >= 0 && weaponIndex < MAX_WEAPONS) {
+		inventory.weapons |= (1 << weaponIndex);
+
+		SelectWeapon(weaponIndex, true);
+	}
+	else {
+		gameLocal.Printf("Weapon %s not found\n", weaponName);
+	}
 }
 
 /*
@@ -8212,12 +8382,12 @@ int GetItemBuyImpulse( const char* itemName )
 		{ "weapon_shotgun",					IMPULSE_100, },
 		{ "weapon_machinegun",				IMPULSE_101, },
 		{ "weapon_hyperblaster",			IMPULSE_102, },
-		{ "weapon_grenadelauncher",			IMPULSE_103, },
+		{ "weapon_floorlauncher",			IMPULSE_103, },
 		{ "weapon_nailgun",					IMPULSE_104, },
 		{ "weapon_rocketlauncher",			IMPULSE_105, },
 		{ "weapon_railgun",					IMPULSE_106, },
 		{ "weapon_lightninggun",			IMPULSE_107, },
-		//									IMPULSE_108 - Unused
+		{ "weapon_wallLauncher",			IMPULSE_108  },
 		{ "weapon_napalmgun",				IMPULSE_109, },
 		//		{ "weapon_dmg",						IMPULSE_110, },
 		//									IMPULSE_111 - Unused
@@ -8523,6 +8693,9 @@ void idPlayer::PerformImpulse( int impulse ) {
 		case IMPULSE_13: {
 			Reload();
 			break;
+		} case IMPULSE_24: {
+			PlusOneCollectables();
+			break;
 		}
 		case IMPULSE_14: {
 			NextWeapon();
@@ -8596,7 +8769,7 @@ void idPlayer::PerformImpulse( int impulse ) {
    		}
 
 		case IMPULSE_23: {
-			HelpHud = uiManager->FindGui("guis/help.gui", true, false, true);
+			waveStart();
 			break;
 		}
 				
@@ -8622,12 +8795,12 @@ void idPlayer::PerformImpulse( int impulse ) {
 		case IMPULSE_100:	AttemptToBuyItem( "weapon_shotgun" );				break;
 		case IMPULSE_101:	AttemptToBuyItem( "weapon_machinegun" );			break;
 		case IMPULSE_102:	AttemptToBuyItem( "weapon_hyperblaster" );			break;
-		case IMPULSE_103:	AttemptToBuyItem( "weapon_grenadelauncher" );		break;
+		case IMPULSE_103:	AttemptToBuyItem( "weapon_floorlauncher" );		break;
 		case IMPULSE_104:	AttemptToBuyItem( "weapon_nailgun" );				break;
 		case IMPULSE_105:	AttemptToBuyItem( "weapon_rocketlauncher" );		break;
 		case IMPULSE_106:	AttemptToBuyItem( "weapon_railgun" );				break;
 		case IMPULSE_107:	AttemptToBuyItem( "weapon_lightninggun" );			break;
-		case IMPULSE_108:	break; // Unused
+		case IMPULSE_108:	AttemptToBuyItem("weapon_wallLauncher");			break;
 		case IMPULSE_109:	AttemptToBuyItem( "weapon_napalmgun" );				break;
 		case IMPULSE_110:	/* AttemptToBuyItem( "weapon_dmg" );*/				break;
 		case IMPULSE_111:	break; // Unused
@@ -8729,6 +8902,22 @@ void idPlayer::HandleObjectiveInput() {
 		ToggleObjectives ( );
 	}
 #endif
+}
+
+/*
+==============
+idPlayer::PlusOneCollectables
+==============
+*/
+void idPlayer::PlusOneCollectables() {
+	inventory.wood += 1;
+	inventory.stone += 1;
+	inventory.metal += 1;
+	inventory.silverOre += 1;
+	inventory.sleekMechParts += 1;
+
+	gameLocal.Printf("Collectables updated: wood=%d, stone=%d, metal=%d, silverOre=%d, sleekMechParts=%d\n",
+		inventory.wood, inventory.stone, inventory.metal, inventory.silverOre, inventory.sleekMechParts);
 }
 
 /*
@@ -11194,6 +11383,15 @@ void idPlayer::Event_ApplyImpulse ( idEntity* ent, idVec3 &point, idVec3 &impuls
 	GetPhysics()->ApplyImpulse( 0, point, impulse );
 }
 
+/*
+=============
+idPlayer::Event_BuyWeapon
+=============
+*/
+void idPlayer::Event_BuyWeapon(const char* weaponName) {
+	buyingManager.BuyWeapon(this, weaponName);
+}
+
 // mekberg: added Event_EnableObjectives
 /*
 =============
@@ -12938,6 +13136,26 @@ void idPlayer::Event_LevelTrigger( void ) {
 				ent->PostEventMS( &EV_Activate, 1, this );
 			}
 		}
+	}
+}
+
+/*
+================
+idPlayer::waveStart()
+================
+*/
+void idPlayer::waveStart() {
+	gameLocal.Printf("waveStart() called for entity: %s\n", this->GetName());
+
+	// Call the script function to activate the wave relay
+	const function_t* func = gameLocal.program.FindFunction("map_convoy_2::activateWaveSpawner");
+	if (func) {
+		idThread* thread = new idThread(func);
+		thread->DelayedStart(0);
+		gameLocal.Printf("Called script function map_convoy_2::activateWaveSpawner\n");
+	}
+	else {
+		gameLocal.Printf("Function map_convoy_2::activateWaveSpawner not found\n");
 	}
 }
 

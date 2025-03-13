@@ -362,18 +362,20 @@
     <ClCompile Include="game\vehicle\Vehicle_Walker.cpp" />
     <ClCompile Include="game\Weapon.cpp" />
     <ClCompile Include="game\weapon\WeaponBlaster.cpp" />
-    <ClCompile Include="game\weapon\WeaponDarkMatterGun.cpp" />
+    <ClCompile Include="game\weapon\Weaponbackbreaker.cpp" />
     <ClCompile Include="game\weapon\WeaponGauntlet.cpp" />
-    <ClCompile Include="game\weapon\WeaponGrenadeLauncher.cpp" />
-    <ClCompile Include="game\weapon\WeaponHyperblaster.cpp" />
-    <ClCompile Include="game\weapon\WeaponLightningGun.cpp" />
-    <ClCompile Include="game\weapon\WeaponMachinegun.cpp" />
-    <ClCompile Include="game\weapon\WeaponNailgun.cpp" />
+    <ClCompile Include="game\weapon\WeaponFloorLauncher.cpp" />
+    <ClCompile Include="game\weapon\Weaponfobr.cpp" />
+    <ClCompile Include="game\weapon\Weaponzapotron.cpp" />
+    <ClCompile Include="game\weapon\WeaponLightMachinegun.cpp" />
+    <ClCompile Include="game\weapon\WeaponNailer.cpp" />
     <ClCompile Include="game\weapon\WeaponNapalmGun.cpp" />
-    <ClCompile Include="game\weapon\WeaponRailgun.cpp" />
-    <ClCompile Include="game\weapon\WeaponRocketLauncher.cpp" />
-    <ClCompile Include="game\weapon\WeaponShotgun.cpp" />
+    <ClCompile Include="game\weapon\WeaponStickyRailgun.cpp" />
+    <ClCompile Include="game\weapon\WeaponAnvilRocketLauncher.cpp" />
+    <ClCompile Include="game\weapon\Weaponlongarmenforcer.cpp" />
+    <ClCompile Include="game\weapon\WeaponWallLauncher.cpp" />
     <ClCompile Include="game\WorldSpawn.cpp" />
+    <ClCompile Include="game\TriggerBuyMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game\Actor.h" />
@@ -480,6 +482,7 @@
     <ClInclude Include="game\vehicle\VehicleStatic.h" />
     <ClInclude Include="game\Weapon.h" />
     <ClInclude Include="game\WorldSpawn.h" />
+    <ClInclude Include="game\TriggerBuyMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="game\Game.def" />
