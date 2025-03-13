@@ -34,8 +34,16 @@ A king of the hill styled mod of Quake 4 with elements of base building with dyn
 
 ## Controls
 
-`[TODO]`
-
+- REPAIR TOOL: 1
+- FLOOR LAUNCHER: M
+- WALL LAUNCHER: N
+- LIGHT MACHINE GUN: 2
+- FIRST ORDER BLASTER RIFLE: 4
+- NAILER: 6
+- ANVIL ROCKET LAUNCHER: 7
+- STICKY RAILGUN: 8
+- ZAPOTRON: 9
+- BACKBRAKER: 0
 ---
 
 ## Change Log
