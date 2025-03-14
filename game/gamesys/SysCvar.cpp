@@ -52,6 +52,8 @@ idCVar si_name(						"si_name",					"Quake 4 Server",	CVAR_GAME | CVAR_SERVERINF
 // squirrel: Mode-agnostic buymenus
 idCVar si_isBuyingEnabled(			"si_isBuyingEnabled",			"0",		CVAR_GAME | CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_BOOL, "enable buying in current mode" );
 idCVar si_dropWeaponsInBuyingModes(	"si_dropWeaponsInBuyingModes",	"0",		CVAR_GAME | CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_BOOL, "dead players drop weapons, even in Buying game modes" );
+idCVar g_enableSinglePlayerBuyMenu("g_enableSinglePlayerBuyMenu", "1", CVAR_GAME | CVAR_ARCHIVE | CVAR_BOOL, "Enable buy menu in single player");
+
 // RITUAL END
 // RAVEN BEGIN
 // ddynerman: new gametype strings

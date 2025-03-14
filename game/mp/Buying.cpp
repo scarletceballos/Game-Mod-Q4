@@ -80,17 +80,18 @@ int riBuyingManager::GetOpponentKillCashAward(void) {
 }
 
 bool riBuyingManager::canBuyWeapon(const idDict& inventory, const char* weaponName) {
+	// Get weapon requirements
 	int neededWood = GetIntValueForKey(va("%s_wood", weaponName), 0);
 	int neededStone = GetIntValueForKey(va("%s_stone", weaponName), 0);
 	int neededMetal = GetIntValueForKey(va("%s_metal", weaponName), 0);
 	int neededSilverOre = GetIntValueForKey(va("%s_silverOre", weaponName), 0);
-	int neededsleekmechparts = GetIntValueForKey(va("%s_sleekMechParts", weaponName), 0);
+	int neededSleekMechParts = GetIntValueForKey(va("%s_sleekMechParts", weaponName), 0);
 
 	return inventory.GetInt("wood") >= neededWood &&
 		inventory.GetInt("stone") >= neededStone &&
 		inventory.GetInt("metal") >= neededMetal &&
 		inventory.GetInt("silverOre") >= neededSilverOre &&
-		inventory.GetInt("sleekMechParts") >= neededsleekmechparts;
+		inventory.GetInt("sleekMechParts") >= neededSleekMechParts;
 }
 
 void riBuyingManager::BuyWeapon(idPlayer* player, const char* weaponName) {
@@ -109,13 +110,13 @@ void riBuyingManager::BuyWeapon(idPlayer* player, const char* weaponName) {
 		int neededStone = GetIntValueForKey(va("%s_stone", weaponName), 0);
 		int neededMetal = GetIntValueForKey(va("%s_metal", weaponName), 0);
 		int neededSilverOre = GetIntValueForKey(va("%s_silverOre", weaponName), 0);
-		int neededsleekmechparts = GetIntValueForKey(va("%s_sleekMechParts", weaponName), 0);
+		int neededSleekMechParts = GetIntValueForKey(va("%s_sleekMechParts", weaponName), 0);
 
 		inventoryDict.SetInt("wood", inventoryDict.GetInt("wood") - neededWood);
 		inventoryDict.SetInt("stone", inventoryDict.GetInt("stone") - neededStone);
 		inventoryDict.SetInt("metal", inventoryDict.GetInt("metal") - neededMetal);
 		inventoryDict.SetInt("silverOre", inventoryDict.GetInt("silverOre") - neededSilverOre);
-		inventoryDict.SetInt("sleekMechParts", inventoryDict.GetInt("sleekMechParts") - neededsleekmechparts);
+		inventoryDict.SetInt("sleekMechParts", inventoryDict.GetInt("sleekMechParts") - neededSleekMechParts);
 
 		// Update idInventory from idDict
 		inventory.wood = inventoryDict.GetInt("wood");
@@ -127,5 +128,6 @@ void riBuyingManager::BuyWeapon(idPlayer* player, const char* weaponName) {
 		player->GiveWeapon(weaponName);
 	}
 }
+
 
 	

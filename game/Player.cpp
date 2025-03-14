@@ -1482,9 +1482,18 @@ idPlayer::BuyWeapon
 */
 
 bool idPlayer::CanBuyWeapon(const char* weaponName) {
-	int cost = GetWeaponCost(weaponName); // Implement this method to return the cost of the weapon
-	return collectables >= cost;
+	idDict inventoryDict;
+
+	// Convert idInventory to idDict
+	inventoryDict.SetInt("wood", inventory.wood);
+	inventoryDict.SetInt("stone", inventory.stone);
+	inventoryDict.SetInt("metal", inventory.metal);
+	inventoryDict.SetInt("silverOre", inventory.silverOre);
+	inventoryDict.SetInt("sleekMechParts", inventory.sleekMechParts);
+
+	return buyingManager.canBuyWeapon(inventoryDict, weaponName);
 }
+
 
 /*
 ==============
@@ -1500,6 +1509,9 @@ void idPlayer::BuyWeapon(const char* weaponName) {
 	}
 }
 
+int idPlayer::GetWeaponCost(const char* weaponName) {
+	return buyingManager.GetWeaponReq(weaponName);
+}
 
 /*
 ==============
@@ -11389,7 +11401,7 @@ idPlayer::Event_BuyWeapon
 =============
 */
 void idPlayer::Event_BuyWeapon(const char* weaponName) {
-	buyingManager.BuyWeapon(this, weaponName);
+	BuyWeapon(weaponName);
 }
 
 // mekberg: added Event_EnableObjectives

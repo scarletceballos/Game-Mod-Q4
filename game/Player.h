@@ -210,6 +210,11 @@ public:
 	int						powerupEndTime[POWERUP_MAX];
 	int						weaponMods[MAX_WEAPONS];
 
+	int GetWeaponCost(const char* weaponName);
+	bool CanBuyWeapon(const char* weaponName);
+	void BuyWeapon(const char* weaponName);
+
+
 	// multiplayer
 	int						ammoPredictTime;
 	int						ammoRegenStep[MAX_WEAPONS];
@@ -314,6 +319,8 @@ public:
 
 	int						lastHitTime;			// last time projectile fired by player hit target
 	int						lastSavingThrowTime;	// for the "free miss" effect
+
+	int						GetWeaponCost(const char* weaponName);
 
 	struct playerFlags_s {
 		bool		forward : 1;
@@ -453,7 +460,7 @@ public:
 	void					ShowBuymenu(void);
 	void					HideBuymenu(void);
 	void					BuyWeapon(const char* weaponName);
-	void					CanBuyWeapon(const char* weaponName);
+	bool					CanBuyWeapon(const char* weaponName);
 
 	void					UpdateCollectables(int amount);
 	void					UpdateCollectableGUI();
@@ -856,8 +863,6 @@ private:
 	idVec3					viewBob;
 	int						landChange;
 	int						landTime;
-	int						collectables;
-
 	// ddynerman: we read fall deltas from spawnargs, cache them to save some lookups
 	float					fatalFallDelta;
 	float					hardFallDelta;

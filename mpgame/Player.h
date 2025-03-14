@@ -215,6 +215,8 @@ public:
 	int						ammoIndices[MAX_WEAPONS];
 	int						startingAmmo[MAX_WEAPONS];
 
+
+
 	int						lastGiveTime;
 
 	idList<idDict*>		items;
